@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+
+data/
+out/
+*.tif
+*.tiff
+*.geojson
+*.pmtiles
+*.mbtiles
+
+.DS_Store
+.ipynb_checkpoints/

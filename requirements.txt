@@ -1,0 +1,4 @@
+earthengine-api==1.7.42
+geopandas==1.1.4
+h3==4.5.0
+pandas==3.0.5
