@@ -12,3 +12,8 @@ out/
 
 .DS_Store
 .ipynb_checkpoints/
+
+# rendered site frames: 7.8MB of derived JPG/PNG, regenerate with
+#   python render_sites.py && python build_contact_sheet.py
+results/imagery/*.jpg
+results/imagery/*.png
