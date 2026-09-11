@@ -18,9 +18,10 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 **Current milestone:** 2 — city-wide green. **M1 closed 2026-09-11** on a 2-of-3 gate
 (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing. All three of M1's open decisions are resolved.
-**Next action:** Measure. The boundary and grid exist (`build_grid.py` → `data/study_boundary.geojson`,
-`data/hex_grid.geojson`; 2,868 hexes over 2,175 km²). Next is the per-pixel greenness composite per
-year clipped to that boundary, reduced to those hexes → the ~23k-row table.
+**Next action:** The change layer. Boundary, grid and the hex table all exist
+(`build_grid.py`, `measure_hexes.py` → `results/m2_hex_table.csv`, 22,944 rows, validated). Next is
+the per-pixel 2019→2026 change image and the hex-level relative change (each hex vs the city median
+for its year), then rank hexes by it.
 
 **M2 is three layers, and only the third one downloads:**
   1. **Base** — greenness per pixel per year: 27M pixels x 8 years = 216M values. Stays server-side,
@@ -141,6 +142,8 @@ values behave. Aim for a spread of expected answers:
 ### 2 — City-wide green
 - [x] **Step 0 — boundary + grid (2026-09-11).** `build_grid.py`. GBA outer boundary + 10km ring =
   2,174.9 km²; 2,868 H3 res-8 hexes (0.758 km² mean) covering 2,173 km².
+- [x] **Step 1 — hex table (2026-09-11).** `measure_hexes.py` → `results/m2_hex_table.csv`.
+  22,944 rows: h3, year, green, wet, n_pixels. Absolute values; relative change derived downstream.
 
 Dry-season (Feb–Mar) median composite per year, 2019–2026, clipped to the boundary.
 Per-pixel NDVI, then aggregate to H3 hexes.
@@ -405,6 +408,30 @@ Append one line per session. Date, what changed, why.
   and clipping would leave edge hexes with fewer pixels than the rest for no analytical gain. The
   10km buffer outline is also simplified at 10m (one pixel), cutting 282 vertices to 203 — that
   polygon is serialized into every Earth Engine request for the rest of M2, so its size is not free.
+
+- 2026-09-11 — **M2 step 1 done: the hex table exists and agrees with M1.** 22,944 rows, no
+  duplicates, no nulls, pixel counts near-constant (7,966-8,042, zero hexes varying >5% across
+  years, zero with a cloud gap). **The independent check that matters:** the 12 hexes whose centres
+  fall inside the Varthur study polygon give slope -0.0140/yr, t = -2.62 against the city median —
+  against M1's -0.0119/yr, t = -3.18 against Lalbagh. Different geometry, different control, same
+  answer. That is the first time M2 machinery has been confirmed by something outside itself.
+  `wet` (MNDWI) was captured in the same pass, so M3's blue layer needs no re-run.
+- 2026-09-11 — **A single hex is not a site, and the naive cross-check misleads.** The hex containing
+  Varthur's centroid reads 0.148-0.200 and the hex containing Lalbagh's reads 0.308-0.347, against
+  M1 polygon values of 0.21-0.27 and 0.44-0.50. Neither is an error: Varthur's centroid hex sits
+  mostly *on the lake*, and Lalbagh (1.4x1.1 km) is smaller than a 0.758 km² hex so its hex is
+  mostly surrounding city. Compare like with like — aggregate the hexes covering a region, don't
+  pick the centroid's hex.
+- 2026-09-11 — **Two bugs worth not repeating, from the first run hanging after 2.5 years.** The
+  Earth Engine client sets **no socket timeout**, so a dropped connection blocks forever; the retry
+  loop never fired because a hang raises nothing, and the process sat at 0% CPU for 30 minutes
+  looking exactly like slow progress. `socket.setdefaulttimeout(180)` converts it to a catchable
+  exception. Separately, a watcher built on `pgrep -f measure_hexes.py` matched *its own* command
+  line and would never have exited. Diagnose a suspected hang by CPU time, not elapsed time.
+- 2026-09-11 — The composite is **not** clipped to the study boundary and does not need to be —
+  `reduceRegions` only reads inside a hex, so the boundary's only job was choosing which hexes
+  exist. Effective study area is the union of hexes (2,173 km²). Earlier wording in M2 said
+  "clipped to the boundary"; that describes intent, not the implementation.
 
 ## Parked: the property/quality matrix
 
