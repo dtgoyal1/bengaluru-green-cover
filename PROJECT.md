@@ -18,8 +18,9 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 **Current milestone:** 2 — city-wide green. **M1 closed 2026-09-11** on a 2-of-3 gate
 (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing. All three of M1's open decisions are resolved.
-**Next action:** Build the study boundary (GBA outer + ~10km ring) and lay the H3 res-8 grid over
-it. That is M2's foundation and nothing can be measured before it exists.
+**Next action:** Measure. The boundary and grid exist (`build_grid.py` → `data/study_boundary.geojson`,
+`data/hex_grid.geojson`; 2,868 hexes over 2,175 km²). Next is the per-pixel greenness composite per
+year clipped to that boundary, reduced to those hexes → the ~23k-row table.
 
 **M2 is three layers, and only the third one downloads:**
   1. **Base** — greenness per pixel per year: 27M pixels x 8 years = 216M values. Stays server-side,
@@ -27,8 +28,8 @@ it. That is M2's foundation and nothing can be measured before it exists.
   2. **Change map** — the per-pixel difference, as a picture. 2019-vs-2026 endpoints are fine *for
      the image*; any quoted number must come from the 8-year slope instead, because endpoint choice
      swings the answer by more than the answer (see 2026-09-11).
-  3. **Hex table** — H3 res 8, avg 0.737 km²: ~3,662 hexes x 8 years = ~29,295 rows. A small CSV.
-     Rankings, locality search and charts are all built from this.
+  3. **Hex table** — H3 res 8: **2,868 hexes x 8 years = 22,944 rows** (measured, not estimated).
+     A small CSV. Rankings, locality search and charts are all built from this.
 
 **Not in M2, and not in the project:** a city-wide aggregate score. Measured 2026-09-11 and it is
 unreadable (t = 0.40, 95% range spans zero), and the scope table already cedes the aggregate story
@@ -138,6 +139,9 @@ values behave. Aim for a spread of expected answers:
   visibly go wrong — a broken method produces a plausible map. Find that out here.
 
 ### 2 — City-wide green
+- [x] **Step 0 — boundary + grid (2026-09-11).** `build_grid.py`. GBA outer boundary + 10km ring =
+  2,174.9 km²; 2,868 H3 res-8 hexes (0.758 km² mean) covering 2,173 km².
+
 Dry-season (Feb–Mar) median composite per year, 2019–2026, clipped to the boundary.
 Per-pixel NDVI, then aggregate to H3 hexes.
 - **Done when:** a hex-level NDVI time series covering the whole boundary, and a
@@ -382,6 +386,25 @@ Append one line per session. Date, what changed, why.
   change map* and wrong for *quoting a figure*, which is the distinction that had been blurred.
   And the "city-wide score" question is struck rather than answered: it was already ceded to IISc in
   the scope table, and the 2026-09-11 measurement shows there is no readable number there anyway.
+
+- 2026-09-11 — **M2 step 0 done: boundary and hex grid built.** The GBA boundary turned out to
+  already exist in OSM as `R7902476` — `admin_level=7`, `operator=Greater Bengaluru Authority`,
+  717.2 km², which matches the delimitation figure. No need to assemble it from the five
+  corporations. Plus a 10km ring = **2,174.9 km²**, and **2,868 H3 res-8 hexes** at 0.758 km² mean
+  covering 2,173 km², i.e. the grid tiles the boundary with no meaningful gap. **22,944 rows** is
+  therefore M2's table size, replacing the ~29k estimate.
+- 2026-09-11 — Three conventions fixed in `build_grid.py`, each guarded by an assert that fails
+  loudly, following `fetch_sites.py`'s precedent: the boundary area must land in 650-800 km² (so an
+  upstream OSM edit breaks the build rather than silently moving the study area), the hex count must
+  land in 2000-4500, and hex centres must fall inside Bangalore's lat/lng box — that last one exists
+  because h3 v4 is latitude-first while GeoJSON is longitude-first, and a silent swap yields a
+  perfectly valid cell set over the wrong hemisphere. Verified empirically that
+  `h3.geo_to_cells` reads a shapely `__geo_interface__` correctly, so no manual flip is needed.
+- 2026-09-11 — **Hex membership is by centre, and this is deliberate — do not "fix" it by clipping.**
+  Hexes straddle the boundary edge. The 10km ring is self-defined so its edge carries no meaning,
+  and clipping would leave edge hexes with fewer pixels than the rest for no analytical gain. The
+  10km buffer outline is also simplified at 10m (one pixel), cutting 282 vertices to 203 — that
+  polygon is serialized into every Earth Engine request for the rest of M2, so its size is not free.
 
 ## Parked: the property/quality matrix
 
