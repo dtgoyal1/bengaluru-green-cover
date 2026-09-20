@@ -18,10 +18,31 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 **Current milestone:** 2 — city-wide green. **M1 closed 2026-09-11** on a 2-of-3 gate
 (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing. All three of M1's open decisions are resolved.
-**Next action:** The change layer. Boundary, grid and the hex table all exist
-(`build_grid.py`, `measure_hexes.py` → `results/m2_hex_table.csv`, 22,944 rows, validated). Next is
-the per-pixel 2019→2026 change image and the hex-level relative change (each hex vs the city median
-for its year), then rank hexes by it.
+**Next action:** The change layer, and it splits in two. **2a** is the hex-level relative change —
+pure pandas over `results/m2_hex_table.csv`, no Earth Engine: each hex against the city median for
+its year, ranked by **slope** (a ranking feeds headlines, so it is a quoted number), carrying the
+endpoint delta as a separate column. **Known tension, not yet settled:** an 8-point OLS slope
+underweights a step change, and the largest real changes found so far are steps in a single year
+(figure 6 of the M2 notebook). Slope is still right for a *quoted* figure; whether it is right for
+the *selection* is open — this is now the **only** open decision in 2a. **2b** is the per-pixel
+change image, which needs EE and cannot be a raster export on the current scopes — `getThumbURL`,
+as in `render_sites.py`, so one coarse overview plus 10m crops of the top-N hexes.
+
+Fix N as a constant *before* looking at the distribution, and state how many of **2,818** hexes
+would clear the threshold by chance. **The wetness question is closed (2026-09-20):** water hexes
+are excluded outright, not carried as a column or a guard, and the exclusion list is fixed and
+written out before any ranking exists — read `results/m2_water_hexes.csv`, do not re-derive the
+rule.
+
+`notebooks/m2_hex_table.ipynb` covers the table as it stands: QC, distributions, the two-year
+choropleth, the endpoint-subtraction trap, the M1 cross-check, one look at `wet`, and — section 7,
+added 2026-09-20 — the water exclusion that derives rule C and writes
+`results/m2_water_hexes.csv`. It needs no Earth Engine and no auth, so it re-runs in any future
+session.
+
+**Study size after the exclusion: 2,818 hexes / 22,544 rows / 2,135 km².** The pre-exclusion
+figures (2,868 / 22,944 / 2,173 km²) still describe `m2_hex_table.csv`, which is unchanged — the
+exclusion is applied downstream as a filter, never by editing the table.
 
 **M2 is three layers, and only the third one downloads:**
   1. **Base** — greenness per pixel per year: 27M pixels x 8 years = 216M values. Stays server-side,
@@ -38,7 +59,7 @@ to IISc. Do not reintroduce it.
 
 Run `notebooks/m1_spot_check.ipynb` for the whole method end to end, and
 `results/imagery/index.html` for the fastest eyeball check on any single number.
-**Last worked on:** 2026-09-11
+**Last worked on:** 2026-09-20
 
 **`EE_PROJECT=project-id-0186438029819335325`** (display name "TAP", `roles/owner`,
 `earthengine.googleapis.com` enabled). Not a credential, but it does travel with this file if the
@@ -154,6 +175,15 @@ Per-pixel NDVI, then aggregate to H3 hexes.
   canopy and is invisible to MNDWI, so a cleared lake renders as canopy loss. Check the top-N
   changed hexes against imagery before any of them becomes a headline. If a per-year mask is ever
   reconsidered: it is disqualified, it makes things strictly worse.
+  **Escalated 2026-09-16 — this is not a spot-check obligation, it is the dominant signal at the
+  top of the ranking.** Of the 20 largest absolute 2019→2026 losses, 10 end wetter than −0.2
+  against a city median of −0.454; the top 4 are all water arriving. Treat an unguarded top-N loss
+  list as wrong by default, not as probably-fine-with-one-outlier. (The companion statistic logged
+  that day — *18 of 20 got wetter over the run* — was **retired 2026-09-20**; it is an artefact of
+  the −0.69 correlation between greenness change and wetness change, not evidence of water.)
+  **Resolved 2026-09-20 — the eyeball is no longer the mitigation.** 50 water hexes (38 km², 1.7%)
+  are excluded by rule C before any ranking exists; see the decision log and
+  `results/m2_water_hexes.csv`. Eyeballing the survivors is now a backstop, not the defence.
 - **Watch:** gotcha 8 forces the change layer to be *relative* — each hex against the city-wide
   median for that year, not against its own absolute value in 2019. An absolute per-hex delta will
   render a whole-city gain or loss that is only weather. Also gotcha 3 escalates here. At pixel level across the fringe, peri-urban
@@ -161,7 +191,12 @@ Per-pixel NDVI, then aggregate to H3 hexes.
   moves from "consider if noisy" to "probably needed."
 
 ### 3 — Blue layer (optional)
-MNDWI over the same composites. Same pipeline, different band math.
+MNDWI over the same composites. **Not** the same pipeline, despite the band math being the only
+difference at pixel level: measured 2026-09-16, a hex *mean* of MNDWI correlates −0.65 with
+greenness and mostly reports "not vegetated", with only 5 of 2,868 hexes positive. The water test
+has to be applied per pixel and the pixels then counted — threshold-then-count, not
+average-then-threshold. `results/m2_hex_table.csv` already carries `wet` as a hex mean, so that
+column is context, not the blue layer.
 - **Done when:** hex-level water time series, or a logged decision to drop it
 - Pre-approved to cut if noisy.
 
@@ -349,7 +384,9 @@ Append one line per session. Date, what changed, why.
   source) rather than trusting JRC alone, and carry a masked-pixel count per hex so any hex whose
   value depends on the mask choice is visible instead of silently folded in.
 
-- 2026-09-11 — **Decided: no lake masking. Skipped deliberately, not overlooked.** It moves the city
+- 2026-09-11 — **Decided: no lake masking. Skipped deliberately, not overlooked.** *(Read with the
+  2026-09-20 entry: that decision stands unchanged for the city mean — it is a decision about
+  masking pixels — and is what makes the later hex exclusion consistent rather than a reversal.)* It moves the city
   mean by 0.002 and the trend by 0.0001/yr, and it would cost a static-footprint pipeline, an
   OpenCity cross-check and a per-hex masked-pixel count — while erasing 11–26% of its own area from
   the loss layer, built-over tanks included, which is the very thing M4 exists to find. Residual
@@ -432,6 +469,102 @@ Append one line per session. Date, what changed, why.
   `reduceRegions` only reads inside a hex, so the boundary's only job was choosing which hexes
   exist. Effective study area is the union of hexes (2,173 km²). Earlier wording in M2 said
   "clipped to the boundary"; that describes intent, not the implementation.
+
+- 2026-09-16 — **`notebooks/m2_hex_table.ipynb` added: the hex table looked at before any
+  normalisation.** Six figures over `results/m2_hex_table.csv` — per-year distributions, the 2019
+  and 2026 choropleths, the endpoint-difference map, the M1 cross-check, and `wet`. Unlike
+  `m1_spot_check.ipynb` it touches **no Earth Engine and needs no auth**, so it re-runs offline.
+  Deliberately descriptive: no per-hex slopes in it, because those are step 2a and writing them
+  twice invites the two copies to drift.
+- 2026-09-16 — **Pixel counts are identical across all eight years, for every hex, to the pixel.**
+  `measure_hexes.py` was written to tolerate ±5% and logged 7,966–8,042 as the range; that range is
+  *between* hexes. Within a hex the count does not move at all, so there is no cloud gap anywhere in
+  the table and every year-to-year comparison in it is the same ground measured twice. Stronger
+  than the tolerance the script was built around.
+- 2026-09-16 — **City trend re-derived from the hex table: +0.00115/yr, t = 0.29** against the
+  logged +0.00163/yr, t = 0.40. Not a discrepancy — the logged figure is pixel-weighted over a
+  2,700 km² box, this one is the unweighted mean of 2,868 hex means over 2,173 km². Same conclusion:
+  no readable city-wide trend. Also measured directly: the 2019→2026 endpoint difference (+0.022) is
+  **three times** the fitted 8-season total (+0.008), which is the endpoint-vs-slope rule with a
+  number on it.
+- 2026-09-16 — **The Varthur cross-check was understating itself: one of the 12 hexes holds 40% of
+  Varthur lake.** Removing that hex gives −0.0095/yr at **t = −3.73**, against −0.0138/yr at
+  t = −2.62 with it. Smaller slope, much less scatter, and it is the fairer comparison because M1's
+  `varthur_built` polygon had the lake punched out by construction (−0.0119/yr, t = −3.18). So the
+  logged 12-hex figure understates the M1/M2 agreement rather than overstating it. Use the
+  11-hex number when quoting this check.
+- 2026-09-16 — **The lake-contamination exposure accepted on 2026-09-11 is confirmed, not
+  hypothetical, and it is worse than "some hexes".** Ranked by absolute 2019→2026 greenness change,
+  the four largest losses in the grid all show wetness climbing as greenness collapses; three of
+  them swap sides in a single year (2023 for two adjacent hexes in the north-west, 2026 for
+  Varthur). Of the top 20 losses, **10 end wetter than −0.2 against a city median of −0.454, and 18
+  of 20 got wetter over the run.** *(Corrected 2026-09-20: the second half of that sentence is an
+  artefact — see below. The first half survives a proper null and the conclusion is unchanged.)* An
+  absolute top-N loss list is not a canopy-loss list, it is a water-arrival list wearing one. The identities of those hexes are **not** established and must not
+  be guessed (gotcha 7); what is established is the signature. This was reached before the ranking
+  existed rather than after, which is what the mitigation asked for.
+- 2026-09-16 — **MNDWI at hex scale is mostly measuring "not vegetated", not water.** Across hexes
+  it correlates **−0.65** with greenness, and the dark band on the wetness map is the built-up core
+  because dry vegetation reflects shortwave infrared strongly. Only **5 hexes of 2,868** read
+  positive at all; above that threshold it does mean real water (Varthur's lake hex, at 40% of one
+  cell, reaches +0.383). So `wet` does two different jobs at the two ends of its range and only one
+  is the job it was chosen for. **M3 will need the water test applied per pixel and then counted**,
+  not the pixels averaged and the average tested — the same average-then-threshold question M1
+  settled for greenness, landing this time where the two do *not* commute. Does not block M2.
+
+- 2026-09-20 — **The 2026-09-16 wetness evidence was two statistics and only one of them was real.**
+  *18 of 20 largest losses got wetter over the run* is **retired**: greenness change and wetness
+  change correlate at **−0.691** across hexes, the top-20 losses sit at z = −6.35 on greenness
+  change, so the correlation alone predicts essentially 20 of 20. Observed 18 is slightly *under*
+  expectation. Selecting the biggest losses selects hexes that got wetter by construction. *10 of 20
+  end wetter than −0.2* **survives**, and needed a better null than the one first used: the naive
+  1.2% base rate is the same mistake, because low-green hexes read wet anyway. Matched on 2026
+  greenness the expectation is 2.14 of 20 against 10 observed — **4.7×**. The discriminator is the
+  **absolute end-state level, never the change.**
+
+- 2026-09-20 — **The guard had to be symmetric, and the gain list is why.** Hyacinth is invisible to
+  MNDWI (2026-09-11), so open water in 2019 that goes under a weed mat by 2026 reads as greenness
+  climbing from nothing to dense canopy — a fabricated restoration, with the wetness evidence in the
+  *first* year and gone by the last. Measured: **7 of the 20 largest gains start wetter than −0.2**,
+  and a final-year-only guard catches 4 of them. This matters more than the loss side, because M1
+  closed the gain direction *by decision* on the promise that M2's ranking would surface a real
+  restoration if one existed.
+
+- 2026-09-20 — **Decided: rule C. A hex is water if it reads wet (MNDWI > −0.2) in ≥2 of the 8
+  years, or in either endpoint year.** 50 hexes, 38 km², **1.7%** of the grid. Excluded outright
+  from the greenness study, Aditya's call, rather than flagged. Why not the simpler tests: a
+  **single baseline year cannot work** — the best year catches 39 of the 56 ever-wet hexes and 2019
+  catches 18, because water in this city is not a fixed object (only **7 hexes read wet in all
+  eight years**), and hyacinth hides Varthur from MNDWI in every year before 2026. **≥2 years alone
+  is blind at the edges** — 7 of the 14 single-year hexes fire in 2026, and all 3 single-year hexes
+  reaching the top-20 loss list are among them; 2026 has no 2027 to corroborate it. The endpoint
+  clause is justified by that asymmetry, not by its catch rate against an endpoint-sorted ranking,
+  which would be circular. **The independent check:** scored against a *slope*-ranked top-40, which
+  privileges neither endpoint, rule C catches 13 against rule A's 13 and rule B's 10 — C recovers
+  the strict rule's full protection while sparing 6 genuine mid-run blips.
+
+- 2026-09-20 — **This does not reverse the 2026-09-11 no-masking decision, and the log must not be
+  read as if it does.** That decision was about masking *pixels* to correct the *city mean*, and it
+  was measured and rejected because the mean moves by 0.002 while the mask erases 11–26% of its own
+  area — built-over tanks included, which is M4's target. This is a *hex* exclusion from the
+  *ranking*. The two are consistent, and the 09-11 measurement is what makes them so: removing the
+  water hexes shifts the normalisation reference by at most **0.0009** in any year against
+  year-to-year swings of 0.05, and leaves the city trend unreadable (+0.00115/yr t = 0.29 →
+  +0.00141/yr t = 0.35), reproducing the pixel-scale +0.00163 → +0.00173 by a different route. The
+  exclusion is not moving the baseline; it only removes contaminated entries. **The excluded 50 are
+  kept, not discarded — they are M4's candidate set**, since a tank that became buildings is the
+  loss M4 exists to find.
+
+- 2026-09-20 — **`results/m2_water_hexes.csv` is the single source for the exclusion.** 50 rows with
+  `h3, n_years_wet, wet_2019, wet_2026, peak_wet, caught_by` (32 caught by both clauses, 10
+  recurrent-only, 8 endpoint-only), so the rule is auditable per hex. Step 2a reads that file and
+  does **not** re-derive the rule — the same reason the 09-16 notebook kept slopes out of itself:
+  two copies of a selection rule drift. `m2_hex_table.csv` is untouched at 22,944 rows; the
+  exclusion is a downstream filter, so it stays reversible and visible.
+
+- 2026-09-20 — Notebook section 7 added and the whole notebook re-executed; the figure title and the
+  printed 18-of-20 line in section 6 were amended in place so the notebook no longer argues with
+  itself. Study size for everything downstream is now **2,818 hexes / 22,544 rows / 2,135 km²**.
 
 ## Parked: the property/quality matrix
 
