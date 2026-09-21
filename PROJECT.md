@@ -37,8 +37,9 @@ rule.
 `notebooks/m2_hex_table.ipynb` covers the table as it stands: QC, distributions, the two-year
 choropleth, the endpoint-subtraction trap, the M1 cross-check, one look at `wet`, and — section 7,
 added 2026-09-20 — the water exclusion that derives rule C and writes
-`results/m2_water_hexes.csv`. It needs no Earth Engine and no auth, so it re-runs in any future
-session.
+`results/m2_water_hexes.csv`; and — section 8, added 2026-09-21 — the normalisation itself, with
+before/after distributions, the weather-sensitivity diagnostic and the endpoint map beside the
+normalised-slope map. It needs no Earth Engine and no auth, so it re-runs in any future session.
 
 **Study size after the exclusion: 2,818 hexes / 22,544 rows / 2,135 km².** The pre-exclusion
 figures (2,868 / 22,944 / 2,173 km²) still describe `m2_hex_table.csv`, which is unchanged — the
@@ -59,7 +60,7 @@ to IISc. Do not reintroduce it.
 
 Run `notebooks/m1_spot_check.ipynb` for the whole method end to end, and
 `results/imagery/index.html` for the fastest eyeball check on any single number.
-**Last worked on:** 2026-09-20
+**Last worked on:** 2026-09-21
 
 **`EE_PROJECT=project-id-0186438029819335325`** (display name "TAP", `roles/owner`,
 `earthengine.googleapis.com` enabled). Not a credential, but it does travel with this file if the
@@ -565,6 +566,48 @@ Append one line per session. Date, what changed, why.
 - 2026-09-20 — Notebook section 7 added and the whole notebook re-executed; the figure title and the
   printed 18-of-20 line in section 6 were amended in place so the notebook no longer argues with
   itself. Study size for everything downstream is now **2,818 hexes / 22,544 rows / 2,135 km²**.
+
+- 2026-09-21 — **A flat subtraction is the right correction, and this is now measured rather than
+  assumed.** Aditya's question: if the city median under-corrects the green belt, and the green belt
+  is where loss is expected, does the method miss the loss? Measured: hexes do *not* respond to
+  weather equally — regressing each hex's deviation on the city's, **β runs 0.53 in the least-green
+  decile to 1.31 in the greenest, a 2.5× spread**. So a flat subtraction over-corrects built-up
+  hexes and under-corrects green ones. **But the leftover is a wobble, not a bias:** it peaks at
+  0.010 with a trend of +0.00044/yr, against real losses of 0.13–0.31, because the city series it is
+  a fraction of has no trend (t = 0.29). Under-correction makes a green hex's line *fuzzier*, not
+  its loss smaller. **The error runs opposite to the worry** — fuzzier lines throw more extreme
+  slopes by chance, so the green belt is over-represented at the top of a ranking, not missed by it.
+
+- 2026-09-21 — **Three normalisation schemes pick the same hexes, so the choice is closed.** Top-40
+  agreement: additive (subtract the city median) vs β-residualised **38 of 40**; additive vs
+  stratified-median **36 of 40**; β-residualised vs stratified **35 of 40**. Keep the additive
+  subtraction already specified for 2a — confirmed, not assumed. Do not spend a session choosing
+  between corrections that select the same ground.
+
+- 2026-09-21 — **Baseline choice is itself a trap, and it bit once before being caught.** β was
+  first computed against each hex's 2019 value and read 0.65 → 0.95 (1.5×) — flattened and nearly
+  flat. The yearly weather deviations sum to zero by construction, so a hex's **8-year mean carries
+  no weather**, while any single year does; 2019 is the driest year in the run, so a weather-
+  sensitive hex reads low in it and lands in a lower decile, suppressing the very relationship being
+  measured. Correct figure is 0.53 → 1.31 on the 8-year mean. Same class of error as the statistic
+  section 7 retired: a selection variable quietly correlated with the thing being measured. **For
+  the top-40 composition question the contamination runs the other way** — a hex that lost half its
+  canopy has an 8-year mean midway between its start and end state — so that result is reported
+  under both baselines and holds under each.
+
+- 2026-09-21 — **Stated limit for publication: this ranking cannot see the built-up core.** The
+  least-green decile contributes **0 of the top 40**; the greenest contributes **9**. Below 0.22
+  greenness — 379 hexes, 13.4% of the grid — only 3 reach the top 40, about half their share. Not a
+  normalisation failure: a hex at 0.16 greenness has less available range than a farmland hex has
+  year-to-year scatter (residual scatter 0.016 vs 0.031). **So M2 answers "where did vegetated land
+  lose its vegetation", not "where did the city lose its remaining trees".** Those are different
+  questions and only the first is answerable at 0.758 km² on 10m pixels. Put this in the published
+  text rather than letting a reader find it.
+
+- 2026-09-21 — Normalisation removes what it was meant to: the spread of the yearly medians falls
+  from **0.0663 to 0.0055**. The endpoint map and the normalised-slope map correlate +0.904 but
+  **402 of 2,818 hexes move by more than 20 percentile points** between them, which is the visual
+  case for not quoting endpoint figures.
 
 ## Parked: the property/quality matrix
 
