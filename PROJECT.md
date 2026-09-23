@@ -17,42 +17,45 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 
 **Current milestone:** 2 — city-wide green. **M1 closed 2026-09-11** on a 2-of-3 gate
 (flat ✓, loss ✓, gain ✗ — see below).
-**Blocked on:** Nothing. All three of M1's open decisions are resolved.
-**Next action:** The change layer, and it splits in two. **2a** is the hex-level relative change —
-pure pandas over `results/m2_hex_table.csv`, no Earth Engine: each hex against the city median for
-its year, ranked by **slope** (a ranking feeds headlines, so it is a quoted number), carrying the
-endpoint delta as a separate column. **Known tension, not yet settled:** an 8-point OLS slope
-underweights a step change, and the largest real changes found so far are steps in a single year
-(figure 6 of the M2 notebook). Slope is still right for a *quoted* figure; whether it is right for
-the *selection* is open — this is now the **only** open decision in 2a. **2b** is the per-pixel
-change image, which needs EE and cannot be a raster export on the current scopes — `getThumbURL`,
-as in `render_sites.py`, so one coarse overview plus 10m crops of the top-N hexes.
+**Blocked on:** Nothing.
+**Next action:** Finish the 2a ranking on the **masked** table (decided 2026-09-23, see the log):
+  1. **Apply the 25% minimum-land cutoff** — a hex whose land after masking is under 25% of the
+     hex drops out of the ranking. Photo check: it removes exactly the two sliver artefacts in the
+     top 12 (Hesaraghatta, Bellandur).
+  2. **Add a review flag, not an exclusion:** each ranked hex carries its land share *after also
+     removing OSM wetland*. Wetlands stay in the measurement; the column only marks hexes where
+     lake-side wetland may be distorting the number, for case-by-case checking.
+  3. Then the open items: lake works (Ramapura, Bellandur) — label or leave out of the headline
+     list, an editorial call; lakes OSM maps too small (Hennagara) — flag by eye; farmland crop
+     swings — Dynamic World (gotcha 3); **2b** the per-pixel change image via `getThumbURL`.
 
-Fix N as a constant *before* looking at the distribution, and state how many of **2,818** hexes
-would clear the threshold by chance. **The wetness question is closed (2026-09-20):** water hexes
-are excluded outright, not carried as a column or a guard, and the exclusion list is fixed and
-written out before any ranking exists — read `results/m2_water_hexes.csv`, do not re-derive the
-rule.
+**The ranking is end-minus-start** — normalised 2026 minus normalised 2019, losses and gains ranked
+by size — decided 2026-09-23. The slope-vs-endpoint question is closed; the slope can still be
+carried as a second column showing gradual vs sudden.
 
-`notebooks/m2_hex_table.ipynb` covers the table as it stands: QC, distributions, the two-year
-choropleth, the endpoint-subtraction trap, the M1 cross-check, one look at `wet`, and — section 7,
-added 2026-09-20 — the water exclusion that derives rule C and writes
-`results/m2_water_hexes.csv`; and — section 8, added 2026-09-21 — the normalisation itself, with
-before/after distributions, the weather-sensitivity diagnostic and the endpoint map beside the
-normalised-slope map. It needs no Earth Engine and no auth, so it re-runs in any future session.
+**The source table is now `results/m2_hex_table_masked.csv`** (`measure_hexes.py --mask-water`):
+every pixel inside an OSM lake, pond, reservoir or sewage pond (`fetch_water.py` →
+`data/osm_water.geojson`) is dropped before averaging, the same pixels every year. Wetlands are
+**kept**. **Rule C is retired** — the masked table is read with no hex-level water exclusion;
+`results/m2_water_hexes.csv` and `m2_hex_table.csv` stay committed as the before-state. Study
+size: 2,868 hexes, 74.2 km² of pixels masked, no hex left with zero land.
 
-**Study size after the exclusion: 2,818 hexes / 22,544 rows / 2,135 km².** The pre-exclusion
-figures (2,868 / 22,944 / 2,173 km²) still describe `m2_hex_table.csv`, which is unchanged — the
-exclusion is applied downstream as a filter, never by editing the table.
+Notebooks, in reading order (all but two re-run with no Earth Engine):
+  - `m2_hex_table.ipynb` — the unmasked table: QC, normalisation (section 8), trend line vs
+    end-minus-start (9), and the count that exposed the lake problem (10).
+  - `m2_hex_deep_dive.ipynb` (EE) — three hexes up close: photos, raw vs normalised, per-pass
+    spread, water share.
+  - `m2_masked.ipynb` — what the mask changed: before/after top 40, where familiar hexes moved,
+    what a 25% cutoff would do.
+  - `m2_top_photo_check.ipynb` (EE) — photos of the masked top 12, water leaking past the mask, and
+    Hesaraghatta against its OSM outline.
 
 **M2 is three layers, and only the third one downloads:**
   1. **Base** — greenness per pixel per year: 27M pixels x 8 years = 216M values. Stays server-side,
      never pulled (see the Java-background note on `.getInfo()`).
-  2. **Change map** — the per-pixel difference, as a picture. 2019-vs-2026 endpoints are fine *for
-     the image*; any quoted number must come from the 8-year slope instead, because endpoint choice
-     swings the answer by more than the answer (see 2026-09-11).
-  3. **Hex table** — H3 res 8: **2,868 hexes x 8 years = 22,944 rows** (measured, not estimated).
-     A small CSV. Rankings, locality search and charts are all built from this.
+  2. **Change map** — the per-pixel difference, as a picture.
+  3. **Hex table** — H3 res 8: **2,868 hexes x 8 years = 22,944 rows**. A small CSV. Rankings,
+     locality search and charts are all built from this.
 
 **Not in M2, and not in the project:** a city-wide aggregate score. Measured 2026-09-11 and it is
 unreadable (t = 0.40, 95% range spans zero), and the scope table already cedes the aggregate story
@@ -60,7 +63,7 @@ to IISc. Do not reintroduce it.
 
 Run `notebooks/m1_spot_check.ipynb` for the whole method end to end, and
 `results/imagery/index.html` for the fastest eyeball check on any single number.
-**Last worked on:** 2026-09-21
+**Last worked on:** 2026-09-23
 
 **`EE_PROJECT=project-id-0186438029819335325`** (display name "TAP", `roles/owner`,
 `earthengine.googleapis.com` enabled). Not a credential, but it does travel with this file if the
@@ -185,6 +188,13 @@ Per-pixel NDVI, then aggregate to H3 hexes.
   **Resolved 2026-09-20 — the eyeball is no longer the mitigation.** 50 water hexes (38 km², 1.7%)
   are excluded by rule C before any ranking exists; see the decision log and
   `results/m2_water_hexes.csv`. Eyeballing the survivors is now a backstop, not the defence.
+  **Superseded 2026-09-23 — rule C leaked, replaced by a pixel mask.** Rule C still let 25 lake
+  hexes into the top 40 (6.5× the city rate), because weed-covered, part-filled or seasonally dry
+  lakes never read wet on a hex average. Mapped water is now masked per pixel before averaging
+  (`measure_hexes.py --mask-water`), and rule C is no longer applied. See the 2026-09-23 log.
+- [x] **Step 1b — masked hex table (2026-09-23).** `fetch_water.py`, then
+  `measure_hexes.py --mask-water` → `results/m2_hex_table_masked.csv`. Same columns; `n_pixels` is
+  the land left after masking.
 - **Watch:** gotcha 8 forces the change layer to be *relative* — each hex against the city-wide
   median for that year, not against its own absolute value in 2019. An absolute per-hex delta will
   render a whole-city gain or loss that is only weather. Also gotcha 3 escalates here. At pixel level across the fringe, peri-urban
@@ -608,6 +618,78 @@ Append one line per session. Date, what changed, why.
   from **0.0663 to 0.0055**. The endpoint map and the normalised-slope map correlate +0.904 but
   **402 of 2,818 hexes move by more than 20 percentile points** between them, which is the visual
   case for not quoting endpoint figures.
+
+- 2026-09-23 — **Correction to the entry above: the 402 hexes move because of the *measure*, not the
+  weather.** Subtracting the city shifts every hex by the same amount, which changes no ranks and no
+  correlation. So endpoint-vs-slope ranking differences come entirely from end-minus-start vs the
+  trend line. The +0.904 is identical whether or not the endpoint is normalised.
+
+- 2026-09-23 — **Trend line vs end-minus-start, measured on a clean step** (`m2_hex_table.ipynb`
+  section 9). A one-year drop of 0.20 reads as 0.117 on the trend line when it happens in the first
+  or last year and 0.267 in the middle, a 2.3× range set purely by timing; end-minus-start reads 0.200
+  in every case. The two top-40 lists share 28 of 40. **Decided (Aditya): rank by end-minus-start.**
+  Its cost is that it ignores the years between; that cost looked large on hex C until the deep dive
+  showed C's end years were real ground, not luck.
+
+- 2026-09-23 — **Deep dive on three hexes** (`m2_hex_deep_dive.ipynb`). None was random; every jump
+  matched something visible on the ground. **B** (`88601696e3fffff`, Shivaram Karanth Layout) is clean
+  clearing for a layout in 2024. **A** (`8860169631fffff`, Attur Lake, 15% lake): 89% of its
+  2025→2026 drop and 54% of its 2019→2026 drop comes from pixels that became open water. Water
+  arrived; whether that is restoration or a wet year is not established. **C** (`8861892501fffff`) is
+  **50% Bellandur Lake and 33% K&C Valley sewage plant**, not farmland as first guessed: marsh, dug up,
+  regrown, dug up again (OSM notes "rejuvenation and desilting ongoing as of 2026"). Ruled out as
+  causes: the normalisation (hex swings 0.18–0.21 raw against the city's 0.064) and clouds (the
+  clear-pass median matches the stored value within ~0.03). C shows 0–3% open water while being half
+  lake, which is exactly how rule C misses weed-covered lakes.
+
+- 2026-09-23 — **Rule C leaked badly.** Against every OSM lake, pond, wetland, sewage pond and
+  reservoir in the study area (`fetch_water.py`, 6,421 polygons), **25 of the top 40** by
+  end-minus-start were lake hexes (≥10% mapped water), against 9.7% of the grid: 6.5×. The trend-line
+  top 40 was similar (22). Rank 2 was a hex that is 99% Hesaraghatta Lake. Mapped water is **3.95% of
+  the study area** (lakes 3.3%, wetland 0.55%, reservoirs 0.11%, sewage ponds 0.01%), spread across
+  lake edges. 46 of rule C's 50 hexes have ≥10% mapped water; the other 4 are an unmapped tank bed
+  near Hoskote (Shankanipura/Upparahalli) that the pixel mask won't catch.
+
+- 2026-09-23 — **Decided (Aditya): pixel mask from OSM water, replacing rule C, wetlands kept.**
+  One approach, not two. Wetlands stay in the measurement because their loss belongs in the story, and
+  OSM maps them too patchily to mask consistently (136 of 155 carry no subtype, 2 are named, 63% of
+  their area sits within 50 m of a lake). The mask is fixed across years, so this is **not** the
+  per-year mask the 2026-09-11 entry disqualified. Masking is exact: land-pixel counts match OSM area
+  within 0.5% on four test hexes.
+
+- 2026-09-23 — **What the mask changed** (`m2_masked.ipynb`). Hexes with no mapped water didn't move
+  at all. Lake hexes in the top 40: 25 → **19**; wetland ≥10%: 7 → 10. Hex B rose from 72nd to 51st;
+  A fell 20 → 83; C fell 10 → 72; the 99%-Hesaraghatta hex fell 2 → 194. New arrivals at the top are
+  mostly lake *shorelines*, and hexes rule C used to drop entirely.
+
+- 2026-09-23 — **Photo check on the masked top 12** (`m2_top_photo_check.ipynb`). **7 of 12 are real
+  clearing or building**: the Shivaram Karanth Layout in Yelahanka (ranks 6, 9, 10) and a development
+  area east of Whitefield around 13.015, 77.74–77.76 (ranks 2, 5, 11, two of them with mapped wetland
+  built over), plus spreading buildings north of Ramapura (8). The rest: rank 1 Hennagara Lake, where
+  OSM maps only a sliver of the lake and 9–42% of the "land" is water; ranks 7 and 12, slivers with
+  almost no land; rank 3, Ramapura lake works on the wetland edge; rank 4, farm plots beside
+  Hesaraghatta (crop swings). Only 2 of 12 had open water inside their unmasked land in any year.
+  **Hesaraghatta's OSM outline is good:** it is the full 5.98 km² bed; water filled 2% of it in
+  2019–21 and 40–52% from 2023, with only 0.02–0.27 km² outside it. The problem there was a dry lake
+  bed reading as grassland then flooding, which the mask now removes.
+
+- 2026-09-23 — **Decided (Aditya): apply a 25% minimum-land cutoff, and carry a "land without water
+  or wetland" column as a review flag only.** The cutoff removes exactly the two slivers in the top
+  12. The flag marks hexes where lake-side wetland may distort the number, for case-by-case checking;
+  wetland is still measured. Not yet implemented at this commit.
+
+- 2026-09-23 — Earth Engine hangs are a pattern, not a one-off: `socket.setdefaulttimeout` does not
+  stop them. The masked run stalled twice (2022, 2024) and resumed cleanly each time. A notebook run
+  hung for 21 minutes until `ee.data.setDeadline(120_000)` plus a retry wrapper was added. Use both in
+  any new EE code. Overpass is flaky too: `overpass-api.de` returns 504 for per-hex polygon queries.
+  `overpass.kumi.systems` works but can take a minute, and returns relations without member geometry
+  under `out geom tags`; Nominatim's lookup with `polygon_geojson=1` is the reliable way to get a
+  lake outline.
+
+- 2026-09-23 — The two Earth Engine notebooks store their photo figures as JPEG, re-encoded after
+  execution: `m2_top_photo_check.ipynb` went from 16.5 MB to 2.7 MB, the deep dive from 4.9 to 1.0 MB.
+  A plain re-run writes PNG again, so re-encode before committing, or the repo grows by about 20 MB
+  per run.
 
 ## Parked: the property/quality matrix
 

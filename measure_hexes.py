@@ -33,6 +33,15 @@ Two things learned the hard way on the first run, which hung after 2.5 years:
     `socket.setdefaulttimeout` converts it into an exception the retry can see.
   * The run is therefore resumable. Completed chunks are skipped on restart, so
     killing this script costs at most one chunk.
+
+`--mask-water` (added 2026-09-23) writes `results/m2_hex_table_masked.csv` instead.
+Every pixel inside an OSM lake, pond, reservoir or sewage pond (`fetch_water.py`)
+is dropped before averaging, the same pixels in every year. Wetlands are kept on
+purpose: their loss is part of the story, and OSM maps them too patchily to mask
+consistently. `n_pixels` then counts the land left in the hex, so a hex that is
+entirely water has `n_pixels` 0 and no greenness. This replaces rule C
+(`results/m2_water_hexes.csv`) rather than adding to it: the masked table is read
+without that exclusion.
 """
 
 import csv
@@ -54,7 +63,10 @@ NET_TIMEOUT_S = 180
 FULL_HEX_PIXELS = 8_004  # measured median, not derived
 
 GRID = Path("data/hex_grid.geojson")
-OUT = Path("results/m2_hex_table.csv")
+WATER = Path("data/osm_water.geojson")
+MASK_WATER = "--mask-water" in sys.argv
+MASKED_CLASSES = ("water", "reservoir", "wastewater")
+OUT = Path("results/m2_hex_table_masked.csv" if MASK_WATER else "results/m2_hex_table.csv")
 FIELDS = ["h3", "year", "green", "wet", "n_pixels"]
 
 
@@ -71,13 +83,25 @@ def indices(year: int, region) -> ee.Image:
 	)
 
 
-def chunk_rows(frame, year: int) -> list[dict]:
+def land_mask(frame, water) -> ee.Image | None:
+	near = water[water.intersects(frame.union_all())]
+	if near.empty:
+		return None
+	lakes = ee.FeatureCollection([ee.Feature(ee.Geometry(g.__geo_interface__)) for g in near.geometry])
+	return ee.Image.constant(1).paint(lakes, 0)
+
+
+def chunk_rows(frame, year: int, water=None) -> list[dict]:
 	fc = ee.FeatureCollection([
 		ee.Feature(ee.Geometry(r.geometry.__geo_interface__), {"h3": r.h3}) for r in frame.itertuples()
 	])
+	image = indices(year, fc)
+	mask = land_mask(frame, water) if water is not None else None
+	if mask is not None:
+		image = image.updateMask(mask)
 	reducer = ee.Reducer.mean().combine(ee.Reducer.count(), sharedInputs=True)
 	stats = (
-		indices(year, fc)
+		image
 		.reduceRegions(collection=fc, reducer=reducer, scale=SCALE_M, tileScale=TILE_SCALE)
 		.select(["h3", "green_mean", "wet_mean", "green_count"], None, False)
 	)
@@ -97,7 +121,7 @@ def already_done() -> set[tuple[str, int]]:
 	if not OUT.exists():
 		return set()
 	with OUT.open(newline="") as fh:
-		return {(r["h3"], int(r["year"])) for r in csv.DictReader(fh) if r.get("green") not in (None, "")}
+		return {(r["h3"], int(r["year"])) for r in csv.DictReader(fh) if r.get("n_pixels") not in (None, "")}
 
 
 def main() -> int:
@@ -108,6 +132,11 @@ def main() -> int:
 	ee.Initialize(project=project)
 
 	hexes = gpd.read_file(GRID)
+	water = None
+	if MASK_WATER:
+		water = gpd.read_file(WATER)
+		water = water[water["class"].isin(MASKED_CLASSES)].to_crs(hexes.crs)
+		print(f"masking {len(water):,} OSM water polygons ({', '.join(MASKED_CLASSES)}) -> {OUT}")
 	chunks = [hexes.iloc[i : i + CHUNK] for i in range(0, len(hexes), CHUNK)]
 	done = already_done()
 	print(f"{len(hexes):,} hexes x {len(YEARS)} years in {len(chunks)} chunks of <={CHUNK}")
@@ -129,7 +158,7 @@ def main() -> int:
 					continue
 				for attempt in range(1, MAX_TRIES + 1):
 					try:
-						rows = chunk_rows(frame, year)
+						rows = chunk_rows(frame, year, water)
 						break
 					except Exception as exc:  # hangs surface here too, via the socket timeout
 						if attempt == MAX_TRIES:
