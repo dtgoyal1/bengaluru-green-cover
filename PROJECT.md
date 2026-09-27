@@ -52,8 +52,8 @@ Notebooks, in reading order (all but two re-run with no Earth Engine):
     Hesaraghatta against its OSM outline.
   - `m2_dynamic_world.ipynb` (EE) — can Dynamic World's labels be trusted: cleared soil, known
     places, noise floor, mode vs mean, WorldCover, and why it was dropped.
-  - `m2_loss_photo_check.ipynb` (EE) — ranks 9-40 of the losses: water leak, photos, and a verdict
-    for all 40 (section 3 re-runs offline).
+  - `m2_loss_photo_check.ipynb` (EE) — ranks 9-40 of the losses: water leak, photos, a verdict for
+    all 40, and which verdicts depend on the 2019 start year.
   - `m2_change_map.ipynb` (EE) — the per-pixel map checked against the table, the whole study
     area with the 40 verdicts, and three places at 10 m.
 
@@ -725,8 +725,8 @@ Append one line per session. Date, what changed, why.
   - It overlaps the greenness top 40 by only 5 of 40. Rank agreement across all 2,860 hexes is 0.60.
   - **Moving the start year by one changes 23 of the tree top 40; greenness keeps 32 of 40** under
     the same test (four start/end definitions: 26-19, 26-20, avg 25-26 minus avg 19-20, avg 25-26
-    minus avg 20-21). So the instability is Dynamic World's, not a single-endpoint problem for the
-    whole project; the end-minus-start decision stands.
+    minus avg 20-21). So most of the instability is Dynamic World's. Greenness has a smaller version
+    of the same 2019 problem (the 09-27 photo-check entry below); the end-minus-start decision stands.
   - 20 of the tree top 40 sit east of 77.8°E (the Hoskote side), which is only 221 of 2,860 hexes.
     That band reads 25.9% trees in 2019 against 17-22% in every later year, while the rest of the
     city reads 12-13% in 2019. A regional 2019 anomaly. **Not image count:** 2019 has a Dynamic World
@@ -774,6 +774,14 @@ Append one line per session. Date, what changed, why.
   - **Three of the six doubtful hexes (ranks 28, 34, 38) lose over half their drop in the single step
     2019 to 2020 with no visible cause.** The same kind of reading tripped the Dynamic World ranking.
     The site should show 2020 beside 2019, not only the endpoints.
+  - **The 2019 bump is in greenness too, on the east fringe.** Relative to the city, greenness east
+    of 77.8°E fell 0.032 between 2019 and 2020 alone (about a third of a rank-40 loss); the middle
+    band fell 0.007 and the west rose 0.007. With 2020 as the start year, 8 hexes leave the top 40:
+    5 of the 6 doubtful hexes (all but the Bellandur shore), the Varthur weed clearing, and 2 real
+    losses on the Varthur side (ranks 20 and 23, which fall to 72 and 67). **The photos and the
+    start-year test point at the same hexes. 28 of the 30 quotable losses stay in the top 40 either
+    way**, and `rank_from_2020` in the verdicts CSV carries this for every hex. The method is
+    unchanged; this is a column, not a new ranking.
 - 2026-09-27 — **Lake works left out of the headline list (Claude's call, provisional).** Aditya
   asked for M2 to be finished without check-ins, and this was the one editorial call left. Kept on
   the map with the label, left out of the quotable 30: real vegetation removal, but not the
