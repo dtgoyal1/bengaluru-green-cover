@@ -15,20 +15,20 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 
 ## Status
 
-**Current milestone:** 2 — city-wide green. **M1 closed 2026-09-11** on a 2-of-3 gate
-(flat ✓, loss ✓, gain ✗ — see below).
+**Current milestone:** 3 — blue layer (optional), or straight to 4. **M2 closed 2026-09-27.**
+**M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** Finish the 2a ranking on the **masked** table (decided 2026-09-23, see the log):
-  1. **Done 2026-09-23:** the 25% minimum-land cutoff (8 hexes not ranked) and the `check` flag for
-     clean land (neither water nor wetland) under 90%, in `m2_masked.ipynb` section 6. Wetlands stay
-     in the measurement. 18 of the top 40 are flagged and need a case-by-case look before any of them
-     is quoted.
-  2. **Done 2026-09-27: Dynamic World dropped** (see the log). Crop swings and lake edges are
-     judged by eye in the photo checks.
-  3. Photo-check the rest of the 40 biggest losses (ranks 9-40); ranks 1-8 were checked 09-23.
-     Record a verdict per hex. Lake works (Ramapura, Bellandur): label or leave out of the headline
-     list, an editorial call; lakes OSM maps too small (Hennagara): mark by eye.
-  4. **2b:** the per-pixel change image via `getThumbURL`. Then M2 closes.
+**Next action:** Aditya's call: attempt M3 (pre-approved to cut if noisy) or cut it and start M4,
+the buffer-zone cross-reference. Before M7 needs a gain counter-example, photo-check the gains list
+the same way as the losses; it is unchecked, and Hennagara (the lake OSM maps too small) and the
+Hesaraghatta farm plots are on it.
+
+**M2's result:** `results/m2_loss_verdicts.csv` — every one of the 40 biggest losses photo-checked,
+**30 quotable** (27 real loss, 3 real loss on wetland), 4 lake works and 6 doubtful left out of the
+headline list (`m2_loss_photo_check.ipynb`). The per-pixel change map (`render_change_map.py`,
+`m2_change_map.ipynb`) matches the table to 2e-5 on 100 hexes. **The lake-works call is provisional:**
+made by Claude 2026-09-27 while Aditya asked for M2 to be finished without check-ins. Reverse it by
+adding "lake works" to `HEADLINE` in the photo-check notebook's section 3.
 
 **The ranking is end-minus-start** — normalised 2026 minus normalised 2019, losses and gains ranked
 by size — decided 2026-09-23. The slope-vs-endpoint question is closed; the slope can still be
@@ -52,6 +52,10 @@ Notebooks, in reading order (all but two re-run with no Earth Engine):
     Hesaraghatta against its OSM outline.
   - `m2_dynamic_world.ipynb` (EE) — can Dynamic World's labels be trusted: cleared soil, known
     places, noise floor, mode vs mean, WorldCover, and why it was dropped.
+  - `m2_loss_photo_check.ipynb` (EE) — ranks 9-40 of the losses: water leak, photos, and a verdict
+    for all 40 (section 3 re-runs offline).
+  - `m2_change_map.ipynb` (EE) — the per-pixel map checked against the table, the whole study
+    area with the 40 verdicts, and three places at 10 m.
 
 **M2 is three layers, and only the third one downloads:**
   1. **Base** — greenness per pixel per year: 27M pixels x 8 years = 216M values. Stays server-side,
@@ -167,7 +171,7 @@ values behave. Aim for a spread of expected answers:
   Without it, "run NDVI over Bangalore and look at the map" has nothing in it that can
   visibly go wrong — a broken method produces a plausible map. Find that out here.
 
-### 2 — City-wide green
+### 2 — City-wide green — **CLOSED 2026-09-27**
 - [x] **Step 0 — boundary + grid (2026-09-11).** `build_grid.py`. GBA outer boundary + 10km ring =
   2,174.9 km²; 2,868 H3 res-8 hexes (0.758 km² mean) covering 2,173 km².
 - [x] **Step 1 — hex table (2026-09-11).** `measure_hexes.py` → `results/m2_hex_table.csv`.
@@ -198,6 +202,13 @@ Per-pixel NDVI, then aggregate to H3 hexes.
 - [x] **Step 1b — masked hex table (2026-09-23).** `fetch_water.py`, then
   `measure_hexes.py --mask-water` → `results/m2_hex_table_masked.csv`. Same columns; `n_pixels` is
   the land left after masking.
+- [x] **Step 2a — the ranking, photo-checked (2026-09-27).** End-minus-start on the masked table, 25%
+  land cutoff, `check` flag (`m2_masked.ipynb` sections 6-7); all 40 biggest losses checked against
+  imagery (`m2_top_photo_check.ipynb`, `m2_loss_photo_check.ipynb`) → `results/m2_loss_verdicts.csv`.
+  30 quotable. The gains list is not yet checked.
+- [x] **Step 2b — per-pixel change map (2026-09-27).** `render_change_map.py` →
+  `results/m2_change_map.png` (gitignored, 18 m a pixel); `m2_change_map.ipynb` shows it matches the
+  table (largest gap 2e-5 over 100 hexes).
 - **Watch:** gotcha 8 forces the change layer to be *relative* — each hex against the city-wide
   median for that year, not against its own absolute value in 2019. An absolute per-hex delta will
   render a whole-city gain or loss that is only weather. Also gotcha 3 escalates here. At pixel level across the fringe, peri-urban
@@ -749,6 +760,36 @@ Append one line per session. Date, what changed, why.
   its own photo checks and would carry the same weaknesses. `measure_trees.py`,
   `results/m2_hex_trees.csv` and `m2_dynamic_world.ipynb` stay committed as the record, so it isn't
   retried. Gotcha 3 is now handled by eye in the photo checks, and stays a published limit.
+
+- 2026-09-27 — **All 40 biggest losses photo-checked; 30 are quotable** (`m2_loss_photo_check.ipynb`,
+  `results/m2_loss_verdicts.csv`, one verdict and a one-line note per hex). Ranks 1-8 carried from
+  09-23, ranks 9-40 new. Of the 40: 27 real loss, 3 real loss on wetland, 4 lake works, 6 doubtful,
+  0 artefacts. No hex among ranks 9-40 has over 5% open water in its land in any year, so the mask
+  plus the cutoff did their job. Findings worth keeping:
+  - The Shivaram Karanth Layout is 11 of the 27 real losses, all cleared in one go in 2024. The rest
+    are mostly gradual building on the Whitefield-Varthur-Sarjapura side, plus the STRR highway and
+    a warehouse at Kolathuru.
+  - **The `check` flag finds lake trouble, not farmland doubt:** all 4 lake-works hexes are flagged,
+    but so are 9 real losses; the 4 doubtful hexes among the 25 clean ones are all farmland.
+  - **Three of the six doubtful hexes (ranks 28, 34, 38) lose over half their drop in the single step
+    2019 to 2020 with no visible cause.** The same kind of reading tripped the Dynamic World ranking.
+    The site should show 2020 beside 2019, not only the endpoints.
+- 2026-09-27 — **Lake works left out of the headline list (Claude's call, provisional).** Aditya
+  asked for M2 to be finished without check-ins, and this was the one editorial call left. Kept on
+  the map with the label, left out of the quotable 30: real vegetation removal, but not the
+  development story, and quoting it invites an easy rebuttal. Doubtful hexes are left out too.
+  Reverse by adding "lake works" to `HEADLINE` in the notebook.
+- 2026-09-27 — **Step 2b: the per-pixel change map** (`render_change_map.py` →
+  `results/m2_change_map.png`, `m2_change_map.ipynb`). Each pixel is normalised with the same
+  city-wide yearly means as the table, so a hex average of the map equals the table: median gap
+  7e-16, largest 2e-5 over 40 losses + 60 random hexes. 3,000 px wide went over Earth Engine's 50 MB
+  thumbnail limit; 2,800 px (18 m a pixel) is the widest that renders. The PNG is 10 MB, so it is
+  gitignored. Three things the site must caption: the core reads faintly brown (the flat-subtraction
+  limit from 09-20: -0.014 in the least-green decile to +0.019 in the greenest, a tenth of the
+  scale); single fields in the fringe speckle with the crop calendar, so the hex layer should be the
+  default view; and the large teal areas are gains that haven't been photo-checked.
+- 2026-09-27 — **M2 closed.** Both "done when" items are met: the hex time series over the whole
+  boundary, and the per-pixel change layer. Left for later: the gains list photo check, before M7.
 
 ## Parked: the property/quality matrix
 

@@ -17,3 +17,7 @@ out/
 #   python render_sites.py && python build_contact_sheet.py
 results/imagery/*.jpg
 results/imagery/*.png
+
+# the per-pixel change map picture: 10 MB, regenerate with
+#   python render_change_map.py
+results/m2_change_map.png
