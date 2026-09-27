@@ -19,15 +19,16 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
 **Next action:** Finish the 2a ranking on the **masked** table (decided 2026-09-23, see the log):
-  1. **Apply the 25% minimum-land cutoff** — a hex whose land after masking is under 25% of the
-     hex drops out of the ranking. Photo check: it removes exactly the two sliver artefacts in the
-     top 12 (Hesaraghatta, Bellandur).
-  2. **Add a review flag, not an exclusion:** each ranked hex carries its land share *after also
-     removing OSM wetland*. Wetlands stay in the measurement; the column only marks hexes where
-     lake-side wetland may be distorting the number, for case-by-case checking.
-  3. Then the open items: lake works (Ramapura, Bellandur) — label or leave out of the headline
-     list, an editorial call; lakes OSM maps too small (Hennagara) — flag by eye; farmland crop
-     swings — Dynamic World (gotcha 3); **2b** the per-pixel change image via `getThumbURL`.
+  1. **Done 2026-09-23:** the 25% minimum-land cutoff (8 hexes not ranked) and the `check` flag for
+     clean land (neither water nor wetland) under 90%, in `m2_masked.ipynb` section 6. Wetlands stay
+     in the measurement. 18 of the top 40 are flagged and need a case-by-case look before any of them
+     is quoted.
+  2. **Done 2026-09-27: Dynamic World dropped** (see the log). Crop swings and lake edges are
+     judged by eye in the photo checks.
+  3. Photo-check the rest of the 40 biggest losses (ranks 9-40); ranks 1-8 were checked 09-23.
+     Record a verdict per hex. Lake works (Ramapura, Bellandur): label or leave out of the headline
+     list, an editorial call; lakes OSM maps too small (Hennagara): mark by eye.
+  4. **2b:** the per-pixel change image via `getThumbURL`. Then M2 closes.
 
 **The ranking is end-minus-start** — normalised 2026 minus normalised 2019, losses and gains ranked
 by size — decided 2026-09-23. The slope-vs-endpoint question is closed; the slope can still be
@@ -49,6 +50,8 @@ Notebooks, in reading order (all but two re-run with no Earth Engine):
     what a 25% cutoff would do.
   - `m2_top_photo_check.ipynb` (EE) — photos of the masked top 12, water leaking past the mask, and
     Hesaraghatta against its OSM outline.
+  - `m2_dynamic_world.ipynb` (EE) — can Dynamic World's labels be trusted: cleared soil, known
+    places, noise floor, mode vs mean, WorldCover, and why it was dropped.
 
 **M2 is three layers, and only the third one downloads:**
   1. **Base** — greenness per pixel per year: 27M pixels x 8 years = 216M values. Stays server-side,
@@ -63,7 +66,7 @@ to IISc. Do not reintroduce it.
 
 Run `notebooks/m1_spot_check.ipynb` for the whole method end to end, and
 `results/imagery/index.html` for the fastest eyeball check on any single number.
-**Last worked on:** 2026-09-23
+**Last worked on:** 2026-09-27
 
 **`EE_PROJECT=project-id-0186438029819335325`** (display name "TAP", `roles/owner`,
 `earthengine.googleapis.com` enabled). Not a credential, but it does travel with this file if the
@@ -101,7 +104,7 @@ usable and invisible to `list`. Trust `describe`, or just run `check_setup.py`.
 
 1. **Seasonality dominates.** Bangalore greens up hard post-monsoon and browns by March. A March-vs-October comparison shows huge fake loss. Always compare the same window across years.
 2. **Use MNDWI, not NDWI, for water.** NDWI produces false positives on rooftops and built-up surfaces. MNDWI (green vs SWIR) suppresses them.
-3. **NDVI can't distinguish trees from grass or crops.** Peri-urban agriculture masquerades as canopy. Dry-season imagery helps (grass browns, trees hold). Consider Google Dynamic World for actual land-cover classes if this proves noisy.
+3. **NDVI can't distinguish trees from grass or crops.** Peri-urban agriculture masquerades as canopy. Dry-season imagery helps (grass browns, trees hold). Consider Google Dynamic World for actual land-cover classes if this proves noisy. **Tried and dropped 2026-09-27** — it doesn't fix this (see the log); judge crop swings by eye.
 4. **Compute area in a projected CRS, never in degrees.** EPSG:4326 is for storage and web display. For Bangalore, use EPSG:32643 (UTM 43N) for any area or distance math. Getting this wrong silently produces plausible-looking garbage.
 5. **Cloud cover eats individual dates.** Median composites over a multi-week window handle this; single-date imagery will fail unpredictably.
 6. **Raster volume will blow up static hosting.** Ship full tiles for only the two endpoint years; represent the middle eight as derived vector stats. Cap max zoom at z14.
@@ -199,7 +202,7 @@ Per-pixel NDVI, then aggregate to H3 hexes.
   median for that year, not against its own absolute value in 2019. An absolute per-hex delta will
   render a whole-city gain or loss that is only weather. Also gotcha 3 escalates here. At pixel level across the fringe, peri-urban
   agriculture is a large share of the frame and greens/browns seasonally. Dynamic World
-  moves from "consider if noisy" to "probably needed."
+  moves from "consider if noisy" to "probably needed." **Tested and dropped 2026-09-27** — see the log.
 
 ### 3 — Blue layer (optional)
 MNDWI over the same composites. **Not** the same pipeline, despite the band math being the only
@@ -676,7 +679,10 @@ Append one line per session. Date, what changed, why.
 - 2026-09-23 — **Decided (Aditya): apply a 25% minimum-land cutoff, and carry a "land without water
   or wetland" column as a review flag only.** The cutoff removes exactly the two slivers in the top
   12. The flag marks hexes where lake-side wetland may distort the number, for case-by-case checking;
-  wetland is still measured. Not yet implemented at this commit.
+  wetland is still measured. **Implemented** in `m2_masked.ipynb` section 6: 8 hexes fall under
+  25% land and are not ranked (both slivers among them); 18 of the new top 40 are flagged. In the photo-checked
+  top ten the flag caught every doubtful hex (Hennagara, Ramapura works, Hesaraghatta farm plots) and
+  also flagged three real losses where wetland was built over, which is why it stays a flag.
 
 - 2026-09-23 — Earth Engine hangs are a pattern, not a one-off: `socket.setdefaulttimeout` does not
   stop them. The masked run stalled twice (2022, 2024) and resumed cleanly each time. A notebook run
@@ -690,6 +696,59 @@ Append one line per session. Date, what changed, why.
   execution: `m2_top_photo_check.ipynb` went from 16.5 MB to 2.7 MB, the deep dive from 4.9 to 1.0 MB.
   A plain re-run writes PNG again, so re-encode before committing, or the repo grows by about 20 MB
   per run.
+
+- 2026-09-26 — **Decided (Aditya): from Dynamic World, use only the "trees" class**, as a second way
+  to measure green loss on the same hexes. "This area had many trees and now has few" is the story;
+  crops or scrub cleared for a layout is not the green-cover loss this project is about. Rank the
+  whole city by tree-share change, not just the greenness top 15, and compare the two one-to-one.
+
+- 2026-09-27 — **`measure_trees.py` → `results/m2_hex_trees.csv`: Dynamic World tree share per hex
+  per year**, Feb-Mar mode label, same hexes and years as the greenness table. One pass writes both
+  `trees_land` (the same OSM water mask as `--mask-water`, the default) and `trees_all` (no mask).
+  Pixel counts match the masked and unmasked greenness tables exactly for every row, so the two
+  methods measure the same ground. The run took about 13 hours: 2020, 2021, 2022 and 2024 each
+  stalled for over an hour **even with** `setDeadline` and the socket timeout set, and resumed.
+  Budget for that on any whole-city Dynamic World run.
+
+- 2026-09-27 — **The tree ranking does not hold up as a separate list yet.** Measured:
+  - It overlaps the greenness top 40 by only 5 of 40. Rank agreement across all 2,860 hexes is 0.60.
+  - **Moving the start year by one changes 23 of the tree top 40; greenness keeps 32 of 40** under
+    the same test (four start/end definitions: 26-19, 26-20, avg 25-26 minus avg 19-20, avg 25-26
+    minus avg 20-21). So the instability is Dynamic World's, not a single-endpoint problem for the
+    whole project; the end-minus-start decision stands.
+  - 20 of the tree top 40 sit east of 77.8°E (the Hoskote side), which is only 221 of 2,860 hexes.
+    That band reads 25.9% trees in 2019 against 17-22% in every later year, while the rest of the
+    city reads 12-13% in 2019. A regional 2019 anomaly. **Not image count:** 2019 has a Dynamic World
+    label for every Sentinel-2 image (12 of 12) at both east points and at three control points
+    (Lalbagh, Shivaram Karanth, Hulimangala), the fullest year of all. Cause (weather, crop calendar)
+    not checked.
+  - City-wide tree share swings by year (11.6% in 2024, 17.0% in 2023). Never use 2024 as an endpoint.
+  - 27 hexes stay in the tree top 40 under at least 3 of the 4 definitions; all 27 are also lower in
+    2025-26 than in every year 2019-21. 7 of them are in the greenness top 40 (Shivaram Karanth
+    Layout, Kolathuru, Thindlu among them). This is the only candidate list worth a photo check.
+  - **Photo look at 5 top tree losses:** 1 real clearing (Hegganahalli, bushland scraped for a layout
+    — looks like bush, not canopy), 1 partly real (Bhaktarahalli), 2 unclear (Somalapura, Hulimangala),
+    1 looks like label noise (Karibeerana Hosahalli, photos unchanged). **None confirmed as canopy.**
+    Dynamic World's tree patches are smooth blobs that don't follow visible features at this scale.
+    One greenness loss it misses: Varthur (greenness rank 10), dense wetland vegetation cleared for
+    construction, tree share 21% → 23%.
+  - **It does not fix gotcha 3.** The Hesaraghatta farm-plot hex (`88601694a5fffff`, the doubtful
+    crop-swing gain) reads 2% trees to 2021 and 20% by 2026: the same false gain greenness showed.
+    With the Grass Farm hex going 15% → 63% trees, the trees label appears to count greener crops or
+    grass as trees. Not yet confirmed with photos of that hex.
+  - **The lake mask matters less than greenness, but still matters:** 37 of 40 in the tree top 40
+    are the same with or without it. Without it, the Hesaraghatta reservoir refilling over its dry
+    bed reads as a 26-point tree loss, and Hennagara (lake OSM maps too small) reads as a tree gain
+    either way.
+  Photos from this look are in the session scratchpad only, not in the repo.
+
+- 2026-09-27 — **Decided (Aditya): Dynamic World is dropped.** It fails all three jobs it was
+  brought in for: a second measure of green loss (unstable ranking), telling tree loss from farmland
+  clearing (its trees are mostly dark fields and bush in the photos), and fixing crop swings (same
+  false gain at the Hesaraghatta farm plots). Carrying it as a column was rejected too: it would need
+  its own photo checks and would carry the same weaknesses. `measure_trees.py`,
+  `results/m2_hex_trees.csv` and `m2_dynamic_world.ipynb` stay committed as the record, so it isn't
+  retried. Gotcha 3 is now handled by eye in the photo checks, and stays a published limit.
 
 ## Parked: the property/quality matrix
 
