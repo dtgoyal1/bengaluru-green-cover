@@ -22,9 +22,8 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 **Next action:** M4 step 1, photo-check the top 40 ring losses (`results/m4_ring_lakes.csv`) with
 a per-pixel water check on each ring, into `results/m4_ring_verdicts.csv`. Step 0 passed
 2026-09-28 (`notebooks/m4_ring_gate.ipynb`): grid confirmed, clean ring is 10-30 m, 209 of 590
-lakes readable. M4 is lakes only (drains dropped 2026-09-28). Before M7 needs a gain
-counter-example, photo-check the gains list the same way as the losses; it is unchecked, and
-Hennagara (the lake OSM maps too small) and the Hesaraghatta farm plots are on it.
+lakes readable. M4 is lakes only (drains dropped 2026-09-28). The gains list is
+photo-checked (2026-09-28); the M7 counter-example is the Jarakabandekaval plantation.
 
 **M2's result:** `results/m2_loss_verdicts.csv` — every one of the 40 biggest losses photo-checked,
 **30 quotable** (27 real loss, 3 real loss on wetland), 4 lake works and 6 doubtful left out of the
@@ -893,6 +892,18 @@ Append one line per session. Date, what changed, why.
     Mallathahalli, Gunjur and Varthur — famous lakes, several known to be under rejuvenation. If
     the photo check confirms lake works dominate, M4's headline rests on the provisional M2
     lake-works call.
+- 2026-09-28 — **The gains list, photo-checked (`notebooks/m2_gain_photo_check.ipynb` →
+  `results/m2_gain_verdicts.csv`).** Same ranking as `m2_masked.ipynb` section 7, same method as the
+  losses. Of the 40 biggest gains: **6 real gain** (plantation blocks at Jarakabandekaval ranks 3-4,
+  a tree plantation at Chagalatti 9 and 24, plantation blocks at Kodagalahatti 15, a villa
+  township's gardens 28), 13 lake margin (tanks refilled after 2021, weed and marsh spreading over
+  the bed past a low-water OSM outline), 13 doubtful, 3 crop swing, 3 regrowth (grass on empty
+  layouts and the airport's 2019 earthworks), 2 artefact (Hennagara, which OSM maps as a sliver;
+  a Hesaraghatta sliver underwater in 2023). All 6 real gains are clean and hold with a 2020 start.
+  **No gain is a lake restoration**, so the M7 counter-example is a plantation, not the
+  Kaikondrahalli-style story the scope table imagined: Jarakabandekaval first (two adjacent clean
+  hexes, largest gain either start year), Chagalatti second. The start year matters more for gains
+  than losses: 13 of 40 leave the top 40 from 2020 (8 for losses).
 
 ## Parked: the property/quality matrix
 
