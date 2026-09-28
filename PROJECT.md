@@ -20,9 +20,9 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
 **Next action:** M5, static export: GeoJSON + PMTiles (endpoint years as raster, middle years as
-vector stats, max zoom z14). Editorial calls waiting on Aditya, none blocking M5: whether lake
-works count as buffer loss (provisionally no, in M2 and M4 alike), and the M7 counter-example
-(provisionally the Jarakabandekaval plantation; no gain is a lake restoration).
+vector stats, max zoom z14). Scope confirmed by Aditya 2026-09-28: loss of green cover, and loss
+inside protected zones; lake works do not count. Still provisional: the M7 counter-example (the
+Jarakabandekaval plantation; no gain is a lake restoration).
 
 **M4's result:** `results/m4_ring_verdicts.csv` — the 40 biggest losses in the outer 20 m of the
 30 m ring round the 590 OSM lakes of 1 ha or more, each photo-checked: **8 real loss**, 18 lake
@@ -32,9 +32,8 @@ The step 0 gate is `m4_ring_gate.ipynb`.
 **M2's result:** `results/m2_loss_verdicts.csv` — every one of the 40 biggest losses photo-checked,
 **30 quotable** (27 real loss, 3 real loss on wetland), 4 lake works and 6 doubtful left out of the
 headline list (`m2_loss_photo_check.ipynb`). The per-pixel change map (`render_change_map.py`,
-`m2_change_map.ipynb`) matches the table to 2e-5 on 100 hexes. **The lake-works call is provisional:**
-made by Claude 2026-09-27 while Aditya asked for M2 to be finished without check-ins. Reverse it by
-adding "lake works" to `HEADLINE` in the photo-check notebook's section 3.
+`m2_change_map.ipynb`) matches the table to 2e-5 on 100 hexes. **The lake-works call is confirmed** (Aditya,
+2026-09-28): lake works are not loss, in M2 or M4.
 
 **The ranking is end-minus-start** — normalised 2026 minus normalised 2019, losses and gains ranked
 by size — decided 2026-09-23. The slope-vs-endpoint question is closed; the slope can still be
@@ -935,6 +934,10 @@ Append one line per session. Date, what changed, why.
   lakes where vegetation was lost within 30 m of mapped water, each photo-checked. The story beat for
   M7 is "8 lakes where land in the ring was built on or cleared", with the lake-works finding beside
   it; which of the two leads is Aditya's editorial call.
+- 2026-09-28 — **Lake works are not loss: confirmed by Aditya.** Settles the provisional M2 call of
+  09-27 and its M4 twin. Scope is loss of green cover, and loss inside protected zones; a bund,
+  walkway or desilting by the lake's own custodian is neither. So M4's headline is the 8 real
+  losses, and the 18 lake works are context at most.
 
 ## Parked: the property/quality matrix
 
