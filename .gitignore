@@ -21,3 +21,7 @@ results/imagery/*.png
 # the per-pixel change map picture: 10 MB, regenerate with
 #   python render_change_map.py
 results/m2_change_map.png
+
+# lake sample frames (Esri photos are for viewing, not redistribution), regenerate with
+#   python sample_lakes.py [--band LO HI]
+results/m4_lake_sample/*/*.jpg

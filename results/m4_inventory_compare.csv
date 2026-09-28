@@ -1,0 +1,6 @@
+source,area,n,<0.1,0.1-1,1-5,5-10,10-40,40-100,100+,found_in_osm,osm_found_in_it_1ha+,osm_found_in_it_0.1-1,osm_over_inv_area
+KSRSAC tanks,study boundary,770,9,54,337,171,159,32,8,0.757,0.915,0.298,0.79
+ATREE lakes,study boundary,735,0,90,314,140,162,20,9,0.744,0.881,0.193,0.92
+EMPRI revenue inventory,"EMPRI hull (1,399 km2)",1439,313,656,220,128,93,21,6,0.226,0.643,0.19,0.66
+OSM lakes,study boundary,3486,2533,363,302,145,113,21,9,,,,
+OSM lakes,"EMPRI hull (1,399 km2)",931,307,226,223,86,72,13,4,,,,

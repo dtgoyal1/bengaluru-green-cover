@@ -15,13 +15,16 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 
 ## Status
 
-**Current milestone:** 3 — blue layer (optional), or straight to 4. **M2 closed 2026-09-27.**
+**Current milestone:** 4 — buffer-zone cross-reference, not started. **M3 dropped 2026-09-28**
+(see the log). **M2 closed 2026-09-27.**
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** Aditya's call: attempt M3 (pre-approved to cut if noisy) or cut it and start M4,
-the buffer-zone cross-reference. Before M7 needs a gain counter-example, photo-check the gains list
-the same way as the losses; it is unchecked, and Hennagara (the lake OSM maps too small) and the
-Hesaraghatta farm plots are on it.
+**Next action:** M4 step 0, the Earth Engine half of the gate, on the 590 OSM lakes of 1 ha or more
+(`results/m4_ring_pixels.csv`): per-band pixel counts must equal the CSV lake by lake; edge test
+(does the 10-20 m band behave like 0-10 or 20-30); readability (rank-40 loss, -0.105, against each
+ring's scatter, with the multiple fixed before running). M4 is lakes only (drains dropped 2026-09-28). Before M7 needs a gain
+counter-example, photo-check the gains list the same way as the losses; it is unchecked, and
+Hennagara (the lake OSM maps too small) and the Hesaraghatta farm plots are on it.
 
 **M2's result:** `results/m2_loss_verdicts.csv` — every one of the 40 biggest losses photo-checked,
 **30 quotable** (27 real loss, 3 real loss on wetland), 4 lake works and 6 doubtful left out of the
@@ -70,7 +73,7 @@ to IISc. Do not reintroduce it.
 
 Run `notebooks/m1_spot_check.ipynb` for the whole method end to end, and
 `results/imagery/index.html` for the fastest eyeball check on any single number.
-**Last worked on:** 2026-09-27
+**Last worked on:** 2026-09-28
 
 **`EE_PROJECT=project-id-0186438029819335325`** (display name "TAP", `roles/owner`,
 `earthengine.googleapis.com` enabled). Not a credential, but it does travel with this file if the
@@ -215,7 +218,7 @@ Per-pixel NDVI, then aggregate to H3 hexes.
   agriculture is a large share of the frame and greens/browns seasonally. Dynamic World
   moves from "consider if noisy" to "probably needed." **Tested and dropped 2026-09-27** — see the log.
 
-### 3 — Blue layer (optional)
+### 3 — Blue layer (optional) — **DROPPED 2026-09-28**
 MNDWI over the same composites. **Not** the same pipeline, despite the band math being the only
 difference at pixel level: measured 2026-09-16, a hex *mean* of MNDWI correlates −0.65 with
 greenness and mostly reports "not vegetated", with only 5 of 2,868 hexes positive. The water test
@@ -226,9 +229,15 @@ column is context, not the blue layer.
 - Pre-approved to cut if noisy.
 
 ### 4 — Buffer-zone cross-reference
-Intersect detected loss pixels with legally protected lake and storm-water-drain buffers.
-- **Done when:** a list of specific polygons where green/blue → built-up inside a protected buffer
-- **Note:** Karnataka modified SWD buffers in 2025 and a KTCDA amendment was proposed for lake buffers. Verify current rules before publishing any claim here — this is the section most likely to be challenged.
+Intersect vegetation loss with the RMP-2015 30 m lake buffer. **Lakes only, green only** (drains and
+the blue layer dropped 2026-09-28): the 590 OSM lakes of 1 ha or more, the ring measured from
+mapped water, the outer 20 m of it.
+- **Done when:** a list of specific lakes where vegetation was lost within 30 m of mapped water,
+  each photo-checked, with a verdict (reworded 2026-09-28 by Claude, provisional, from "polygons
+  where green/blue → built-up inside a protected buffer")
+- **Note:** Karnataka cut drain buffers in 2025, and the KTCDA lake-buffer amendment's status is
+  contested between sources. The claim is about land protected when the period began. Verify
+  current rules before publishing any claim here — this is the section most likely to be challenged.
 
 ### 5 — Static export
 GeoJSON + PMTiles. Endpoint years as raster, middle years as vector stats.
@@ -253,6 +262,8 @@ Small-multiples grid of the biggest-change hexes as the preview image. Record a 
 | Google Dynamic World | Land-cover classes if NDVI is too noisy | 10m, near-real-time |
 | OpenCity (`data.opencity.in`) | Lake inventory, ATREE lakes & streams map, zone-wise tree census (Nov 2024, Jan/Apr 2025), GBA delimitation | Primary source for Bangalore civic data |
 | OpenStreetMap / Overpass | Amenity and boundary data | Mainly relevant if the property matrix happens |
+| KSRSAC storm-water drains (OpenCity, 2022 KML) | Classified drain centrelines, if drain buffers are ever reopened | BBMP only; public domain. Dropped from M4 2026-09-28 |
+| Lake inventories (`data/inventories/`) | Cross-checking OSM lakes: KSRSAC Tank Information System, ATREE lakes, EMPRI 2018 revenue inventory | Fetched 2026-09-28; KSRSAC states no licence, ATREE is CC-BY |
 
 ---
 
@@ -798,6 +809,59 @@ Append one line per session. Date, what changed, why.
   default view; and the large teal areas are gains that haven't been photo-checked.
 - 2026-09-27 — **M2 closed.** Both "done when" items are met: the hex time series over the whole
   boundary, and the per-pixel change layer. Left for later: the gains list photo check, before M7.
+- 2026-09-28 — **M3 dropped: the project is green loss only.** Aditya's call. The wetness measure has
+  not been reliable at any point: the hex mean of MNDWI correlates -0.65 with greenness and is
+  mostly "not vegetated" (09-16), rule C missed weed-covered and seasonally dry lakes (09-23), and a
+  per-pixel threshold-then-count pipeline would be new work with no evidence yet that it holds. The
+  `wet` column stays in the tables as context. Consequence for M4: its "green/blue → built-up" is
+  now green → built-up, and with Dynamic World dropped "built-up" can only come from a photo check.
+- 2026-09-28 — **M4 measures against the RMP-2015 buffers, not the current ones.** Drains 50 m primary,
+  25 m secondary, 15 m tertiary; lakes 30 m. Aditya's call. The September 2025 notification cut
+  drains to 15/10/5 m, which is 1.5 pixels down to half a pixel and below what 10 m imagery and OSM
+  outline error can resolve; the KTCDA lake bill's status is contested between sources. The old
+  widths were in force for most of 2019-2026, so the claim is "land protected when the period
+  began". State this framing in the published text. Step 0 is a pixel-count gate before any
+  intersection is built.
+- 2026-09-28 — **Lake-bed filling: found through the buffer, not measured directly.** Aditya's call.
+  Encroachment on a lake bed usually comes with building in its ring and on its wetland margin
+  (wetland pixels are kept in the masked table, and 2 of M2's top 3 losses are wetland), so a buffer
+  hit flags the lake and the photo check then looks at the bed. Two limits to state: open water
+  filled and built on is not a greenness loss at all (water and roofs both read low), so only the
+  photos can see it; and a tank erased before OSM mapped it has no outline and no buffer.
+- 2026-09-28 — **Step 0, geometry half: `measure_rings.py` → `results/m4_ring_pixels.csv`.** Each lake's
+  30 m ring counted on the Sentinel-2 grid (EPSG:32643, pixel centres) in three 10 m bands; the
+  0-10 m band is the shoreline and is dropped, so "clean" is the outer 20 m. Large lakes give 2.0
+  clean pixels per 10 m of shore, as the geometry says they should. A lake is one OSM element plus
+  anything touching it: Bellandur and Varthur are each one relation in several disjoint pieces, and
+  counting pieces as lakes had split them. 3,486 lakes, 2,532 of them under 0.1 ha.
+- 2026-09-28 — **What a lake is: OSM, 1 ha or more (590 lakes). Aditya's call, for simplicity.**
+  Evidence: two random samples of 15 photo-checked (`sample_lakes.py`, `results/m4_lake_verdicts.csv`):
+  1-5 ha is 12 tanks, 2 unclear, 1 drain; 0.1-1 ha is no bunded tank at all (4 not lakes, 3 ponds,
+  3 farm or campus ponds, 2 quarry pits, 2 gone, 1 unclear). Against the official inventories
+  (`compare_lake_inventories.py`, `data/inventories/`, `results/m4_inventory_compare.csv`): 92% of
+  OSM lakes of 1 ha or more touch a KSRSAC tank, 88% an ATREE lake; OSM finds 77% of KSRSAC's 770
+  tanks in the study area, 94-100% from 5 ha up. Rejected: KSRSAC (no licence or date stated) and
+  ATREE (CC-BY, 2022), which would have added the ~175 tanks OSM has no water for. Dry-season water
+  share cannot define a lake: real tanks read 0% when dry or under weed. **Limits to state when
+  publishing:** the ring starts at mapped water, not the legal tank edge (OSM outlines are a median
+  0.79 of KSRSAC's), so the claim is "within 30 m of mapped water"; tanks OSM does not map as water,
+  which are likely the dry and built-over ones, are not in the study; 3.3% of the study area
+  (Bengaluru South district side) is outside both inventories, which matters only as a cross-check.
+  The legal definition (KTCDA Act s.2(g): any tank in revenue records, water or not) is the reason
+  an inventory would be more correct; the 1 ha cutoff may be replaced by whatever floor the
+  readability test gives.
+- 2026-09-28 — **KTCDA amendment status is contested between sources**: one search says the Governor
+  did not sign it, another reports Karnataka Act 19 of 2026 notified 18 Feb 2026 with size-graded
+  buffers (0-30 m, from the revenue boundary). It does not change the RMP-2015 decision. Verify
+  before publishing any sentence about current law.
+- 2026-09-28 — **Drains dropped from M4: lakes only.** Aditya's call. The one classified drain map
+  (KSRSAC 2022 KML on OpenCity: 163 primary / 870 secondary / 5,806 tertiary lines, public domain)
+  covers only the old BBMP area, and that is where the greenness ranking is blind: the least-green
+  decile contributes 0 of M2's top 40 (the 09-21 limit). The fringe, where the losses are, has no
+  classified drains, and classifying them ourselves is untested work. Also against it: drain
+  channels sit inside their own buffers and would need cutting out, and KSRSAC and MOD Foundation
+  disagree on class lengths (primary 329 vs 382 km). The KML stays listed as a source if this
+  is ever reopened.
 
 ## Parked: the property/quality matrix
 

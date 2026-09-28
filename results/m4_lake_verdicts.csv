@@ -1,0 +1,31 @@
+band,pick,osm,ha,verdict,note,checked
+1-5ha,1,w779078393,2.007,tank,Nagenahalli: bunded tank with a walking path; dry 2019-21 then refilled from 2023,2026-09-28
+1-5ha,2,w142298792,1.646,tank,tank under weed in dense housing; reads 0% water every dry season; outline ragged,2026-09-28
+1-5ha,3,w28076586,1.629,unclear,"open water among trees, never dries; tank or quarry pit, can't tell from above; outline simplified to a hexagon",2026-09-28
+1-5ha,4,w95639129,1.104,tank,Garudacharpalya: bunded tank in the city,2026-09-28
+1-5ha,5,w44546801,1.899,tank,bunded tank with an island and path; dry 2020-22 then refilled,2026-09-28
+1-5ha,6,w1297658634,2.082,unclear,two turquoise pits inside a larger outline in farmland; a dug-out tank bed or clay pits,2026-09-28
+1-5ha,7,w1080799525,2.829,tank,weed-covered seasonal tank among fields,2026-09-28
+1-5ha,8,w27993527,2.091,tank,"Carmelaram (Gunjur Palya Hosa Kere): fenced bed, dry except a small pond; 0% water since 2022",2026-09-28
+1-5ha,9,w1188681268,1.943,tank,weedy seasonal tank among farms,2026-09-28
+1-5ha,10,w331515387,1.091,not a lake,a long thin channel between the golf course and HAL airport: a drain mapped as natural=water,2026-09-28
+1-5ha,11,w579281807,2.487,tank,marshy tank enclosed by the Prestige Tranquility complex; name is the complex's; outline a crude triangle,2026-09-28
+1-5ha,12,w135783242,1.468,tank,"tank bed gone dry and grassy; held water 2019-23, 0% since 2024; traced from 2011 Bing",2026-09-28
+1-5ha,13,w1189440572,1.64,tank,part-weedy tank inside a layout,2026-09-28
+1-5ha,14,w363083915,4.413,tank,"open tank among trees, never dries; tagged water=pond",2026-09-28
+1-5ha,15,w1157366535,2.944,tank,Sampigehalli: tank under rejuvenation works; outline cuts across the water,2026-09-28
+0.1-1ha,1,w185473801,0.1,gone,outline sits on a paved lot among buildings; no water left,2026-09-28
+0.1-1ha,2,w24543535,0.884,gone,walled plot of bare cleared ground off Haralur Road; no water in any year,2026-09-28
+0.1-1ha,3,w1289591437,0.157,pond,small open pond beside a walled yard,2026-09-28
+0.1-1ha,4,w1176344097,0.134,pond,"small pond by a road, next to a larger weedy tank",2026-09-28
+0.1-1ha,5,w259175024,0.627,unclear,outline over tree canopy in a campus; water only glimpsed under the trees,2026-09-28
+0.1-1ha,6,w1173732096,0.105,quarry pit,pond in a quarried rocky patch,2026-09-28
+0.1-1ha,7,w1174604094,0.528,pond,kunte-style pond among fields; water comes and goes,2026-09-28
+0.1-1ha,8,w1206768377,0.122,farm pond,rectangular pond in a field (man_made=pond),2026-09-28
+0.1-1ha,9,w1353425198,0.302,not a lake,thin strip beside the metro line: a drain mapped as water,2026-09-28
+0.1-1ha,10,w1235996544,0.126,not a lake,thin strip through JP Nagar housing: a drain mapped as water,2026-09-28
+0.1-1ha,11,w348102530,0.111,not a lake,clarifier tank at a sewage treatment plant,2026-09-28
+0.1-1ha,12,w412922539,0.932,not a lake,Leachate Pond at the Mandur landfill,2026-09-28
+0.1-1ha,13,w1179985719,0.14,farm pond,pond in an orchard (man_made=pond),2026-09-28
+0.1-1ha,14,w555922191,0.185,campus pond,"""PU Lake"": a rectangular ornamental pond on a campus",2026-09-28
+0.1-1ha,15,w1193255145,0.775,quarry pit,dark pits among quarry and brick workings,2026-09-28
