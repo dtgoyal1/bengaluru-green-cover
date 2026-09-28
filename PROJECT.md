@@ -19,10 +19,10 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 (see the log). **M2 closed 2026-09-27.**
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** M4 step 0, the Earth Engine half of the gate, on the 590 OSM lakes of 1 ha or more
-(`results/m4_ring_pixels.csv`): per-band pixel counts must equal the CSV lake by lake; edge test
-(does the 10-20 m band behave like 0-10 or 20-30); readability (rank-40 loss, -0.105, against each
-ring's scatter, with the multiple fixed before running). M4 is lakes only (drains dropped 2026-09-28). Before M7 needs a gain
+**Next action:** M4 step 1, photo-check the top 40 ring losses (`results/m4_ring_lakes.csv`) with
+a per-pixel water check on each ring, into `results/m4_ring_verdicts.csv`. Step 0 passed
+2026-09-28 (`notebooks/m4_ring_gate.ipynb`): grid confirmed, clean ring is 10-30 m, 209 of 590
+lakes readable. M4 is lakes only (drains dropped 2026-09-28). Before M7 needs a gain
 counter-example, photo-check the gains list the same way as the losses; it is unchecked, and
 Hennagara (the lake OSM maps too small) and the Hesaraghatta farm plots are on it.
 
@@ -862,6 +862,37 @@ Append one line per session. Date, what changed, why.
   channels sit inside their own buffers and would need cutting out, and KSRSAC and MOD Foundation
   disagree on class lengths (primary 329 vs 382 km). The KML stays listed as a source if this
   is ever reopened.
+- 2026-09-28 — **Step 0 gate criteria, fixed before the Earth Engine numbers exist** (Claude's call,
+  provisional; Aditya asked for no more check-ins). Run: `measure_ring_greenness.py` →
+  `results/m4_ring_table.csv`, 590 lakes x 3 bands x 8 years. Values normalised by subtracting the
+  city-wide yearly mean of the masked hex table, as in M2. `scatter` = standard deviation of a band's
+  eight normalised values about its own straight-line fit.
+  1. **Grid check.** Earth Engine's pixel count equals the local count in at least 99% of bands.
+     Fail → stop, the grid is not the one counted.
+  2. **Edge test.** If the median over lakes of scatter(10-20 m) / scatter(20-30 m) exceeds 1.25,
+     the shore is leaking into the middle band and "clean" becomes the 20-30 m band alone.
+  3. **Readability.** A lake is readable if M2's rank-40 loss (0.105) is at least 3x the noise of an
+     endpoint change, taken as sqrt(2) x scatter of its clean band: scatter <= 0.0247. Known bias:
+     a real sudden loss inflates scatter, so this under-counts the lakes it matters for; the gate
+     is about the population, and any lake that fails it is still photo-checkable.
+  Reverse by editing the constants in the gate notebook.
+- 2026-09-28 — **Step 0 result (`measure_ring_greenness.py`, `notebooks/m4_ring_gate.ipynb`).**
+  - **Grid check failed as written, and the failure was not the grid.** Exact counts matched in
+    58.6% of bands, 90.4% within 1 px, mean gap -0.001 px. Earth Engine's own pixel centres for
+    six mismatched bands equal the local centres exactly; every mismatch is within 0.064 m of a band
+    edge, a tie decided by the EPSG:4326 round trip. The 99%-exact rule tested edge ties, not the
+    grid; replaced by the pixel-centre check (Claude's call, logged openly rather than retuned).
+  - **Edge test: no leak, clean is 10-30 m.** Median scatter ratio 10-20 / 20-30 = 1.15 (limit
+    1.25); 0-10 / 20-30 = 1.51, so the test does separate the shoreline band.
+  - **Readability: 209 of 590 lakes (35%).** Median ring scatter is about 0.03, above the 0.0247
+    limit and above a hex's 0.016-0.031: a 20 m strip is noisier than 8,000 pixels. The share is
+    flat with size (1-5 ha 33%, 10-40 ha 43%); lakes of 100 ha and up have the noisiest rings
+    (median 0.076). Readability is a per-lake flag, not a milestone pass/fail.
+  - **First look.** Only 2 readable lakes lose more than the rank-40 hex loss; 27 unreadable ones
+    do, and the top of that list is Ramapura, Horamavu, Heelalige, Bellandur, Hoodi,
+    Mallathahalli, Gunjur and Varthur — famous lakes, several known to be under rejuvenation. If
+    the photo check confirms lake works dominate, M4's headline rests on the provisional M2
+    lake-works call.
 
 ## Parked: the property/quality matrix
 

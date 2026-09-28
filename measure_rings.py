@@ -58,15 +58,31 @@ def lakes(water: gpd.GeoDataFrame, boundary) -> gpd.GeoDataFrame:
 	return merged[merged.representative_point().within(boundary)].reset_index(drop=True)
 
 
-def ring_pixels(lake, blockers: list, wetlands: list) -> dict:
-	ring = lake.buffer(BUFFER_M).difference(lake)
+def ring(lake, blockers: list):
+	zone = lake.buffer(BUFFER_M).difference(lake)
 	for other in blockers:
-		ring = ring.difference(other)
-	minx, miny, maxx, maxy = ring.bounds
+		zone = zone.difference(other)
+	return zone
+
+
+def surroundings(frame: gpd.GeoDataFrame, water: gpd.GeoDataFrame):
+	masked = water[water["class"].isin(MASKED_CLASSES)].geometry.values
+	wetland = water[water["class"] == "wetland"].geometry.values
+	masked_tree, wetland_tree = STRtree(masked), STRtree(wetland)
+	for lake in frame.itertuples():
+		zone = lake.geometry.buffer(BUFFER_M)
+		blockers = [g for g in masked[masked_tree.query(zone, predicate="intersects")]
+			if not g.intersection(lake.geometry).area > 0]
+		yield lake, blockers, list(wetland[wetland_tree.query(zone, predicate="intersects")])
+
+
+def ring_pixels(lake, blockers: list, wetlands: list) -> dict:
+	zone = ring(lake, blockers)
+	minx, miny, maxx, maxy = zone.bounds
 	xs = np.arange(np.floor(minx / PIXEL_M) * PIXEL_M + PIXEL_M / 2, maxx, PIXEL_M)
 	ys = np.arange(np.floor(miny / PIXEL_M) * PIXEL_M + PIXEL_M / 2, maxy, PIXEL_M)
 	x, y = (a.ravel() for a in np.meshgrid(xs, ys))
-	inside = shapely.contains_xy(ring, x, y)
+	inside = shapely.contains_xy(zone, x, y)
 	x, y = x[inside], y[inside]
 	dist = shapely.distance(lake.boundary, shapely.points(x, y))
 	clean = dist >= PIXEL_M
@@ -86,17 +102,8 @@ def main() -> int:
 	boundary = gpd.read_file(BOUNDARY).to_crs(METRIC).union_all()
 	water = gpd.read_file(WATER).to_crs(METRIC)
 	water["geometry"] = water.geometry.make_valid()
-	frame = lakes(water, boundary)
-	masked = water[water["class"].isin(MASKED_CLASSES)].geometry.values
-	wetland = water[water["class"] == "wetland"].geometry.values
-	masked_tree, wetland_tree = STRtree(masked), STRtree(wetland)
-
 	rows = []
-	for lake in frame.itertuples():
-		zone = lake.geometry.buffer(BUFFER_M)
-		blockers = [g for g in masked[masked_tree.query(zone, predicate="intersects")]
-			if not g.intersection(lake.geometry).area > 0]
-		wetlands = list(wetland[wetland_tree.query(zone, predicate="intersects")])
+	for lake, blockers, wetlands in surroundings(lakes(water, boundary), water):
 		rows.append({
 			"osm": lake.osm,
 			"name": lake.name,
