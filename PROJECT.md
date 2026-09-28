@@ -15,15 +15,19 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 
 ## Status
 
-**Current milestone:** 4 — buffer-zone cross-reference, not started. **M3 dropped 2026-09-28**
-(see the log). **M2 closed 2026-09-27.**
+**Current milestone:** 5 — static export. **M4 closed 2026-09-28** (provisionally, by Claude).
+**M3 dropped 2026-09-28.** **M2 closed 2026-09-27.**
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** M4 step 1, photo-check the top 40 ring losses (`results/m4_ring_lakes.csv`) with
-a per-pixel water check on each ring, into `results/m4_ring_verdicts.csv`. Step 0 passed
-2026-09-28 (`notebooks/m4_ring_gate.ipynb`): grid confirmed, clean ring is 10-30 m, 209 of 590
-lakes readable. M4 is lakes only (drains dropped 2026-09-28). The gains list is
-photo-checked (2026-09-28); the M7 counter-example is the Jarakabandekaval plantation.
+**Next action:** M5, static export: GeoJSON + PMTiles (endpoint years as raster, middle years as
+vector stats, max zoom z14). Editorial calls waiting on Aditya, none blocking M5: whether lake
+works count as buffer loss (provisionally no, in M2 and M4 alike), and the M7 counter-example
+(provisionally the Jarakabandekaval plantation; no gain is a lake restoration).
+
+**M4's result:** `results/m4_ring_verdicts.csv` — the 40 biggest losses in the outer 20 m of the
+30 m ring round the 590 OSM lakes of 1 ha or more, each photo-checked: **8 real loss**, 18 lake
+works, 9 doubtful, 3 outline artefact, 1 water arrived, 1 weed swing (`m4_ring_photo_check.ipynb`).
+The step 0 gate is `m4_ring_gate.ipynb`.
 
 **M2's result:** `results/m2_loss_verdicts.csv` — every one of the 40 biggest losses photo-checked,
 **30 quotable** (27 real loss, 3 real loss on wetland), 4 lake works and 6 doubtful left out of the
@@ -207,7 +211,7 @@ Per-pixel NDVI, then aggregate to H3 hexes.
 - [x] **Step 2a — the ranking, photo-checked (2026-09-27).** End-minus-start on the masked table, 25%
   land cutoff, `check` flag (`m2_masked.ipynb` sections 6-7); all 40 biggest losses checked against
   imagery (`m2_top_photo_check.ipynb`, `m2_loss_photo_check.ipynb`) → `results/m2_loss_verdicts.csv`.
-  30 quotable. The gains list is not yet checked.
+  30 quotable. The gains list was checked 2026-09-28 (`m2_gain_photo_check.ipynb`): 6 real gains.
 - [x] **Step 2b — per-pixel change map (2026-09-27).** `render_change_map.py` →
   `results/m2_change_map.png` (gitignored, 18 m a pixel); `m2_change_map.ipynb` shows it matches the
   table (largest gap 2e-5 over 100 hexes).
@@ -227,7 +231,7 @@ column is context, not the blue layer.
 - **Done when:** hex-level water time series, or a logged decision to drop it
 - Pre-approved to cut if noisy.
 
-### 4 — Buffer-zone cross-reference
+### 4 — Buffer-zone cross-reference — **CLOSED 2026-09-28**
 Intersect vegetation loss with the RMP-2015 30 m lake buffer. **Lakes only, green only** (drains and
 the blue layer dropped 2026-09-28): the 590 OSM lakes of 1 ha or more, the ring measured from
 mapped water, the outer 20 m of it.
@@ -904,6 +908,33 @@ Append one line per session. Date, what changed, why.
   Kaikondrahalli-style story the scope table imagined: Jarakabandekaval first (two adjacent clean
   hexes, largest gain either start year), Chagalatti second. The start year matters more for gains
   than losses: 13 of 40 leave the top 40 from 2020 (8 for losses).
+- 2026-09-28 — **M4 step 1: the top 40 ring losses, photo-checked** (`render_ring_losses.py`,
+  `notebooks/m4_ring_photo_check.ipynb` → `results/m4_ring_verdicts.csv`, `m4_ring_evidence.csv`).
+  Selection fixed beforehand: the 40 most negative clean-ring changes, readable or not.
+  - **8 real loss:** Guni Agrahara / Shivaram Karanth Layout (rank 9, layout road along the west
+    ring), Dooravaninagar (10, road widening and rail works), Medi Agrahara (13, layout grid to the
+    shore), Thubarahalli (19, towers on the east edge), Chittekarepalya (20, sheds on the south
+    edge; the only readable one), Bylakere (21, layout roads and plots), Yarandahalli (30),
+    Mallapura, Nelamangala (40). 6 of 8 hold with a 2020 start; Yarandahalli and Mallapura do not.
+  - **18 lake works lead the list:** Ramapura, Horamavu, Heelalige, Hoodi, Mallathahalli, Gunjur,
+    Chikkabanavara and more — drained, bund rebuilt as a bare or paved walkway, bed desilted. The
+    30 m ring is exactly where a rejuvenation puts its bund. Kept out of the real-loss list, as in
+    M2 (provisional; same reversal).
+  - **Water arriving does not explain the top**, unlike M2: only one ring passes 8% open water in
+    any year (#14, a flooding quarry pit near Sadahalli). The per-pixel ring water check is in the
+    verdicts CSV.
+  - **3 outline artefacts:** Bellandur and Varthur, whose rings take in lake bed between OSM's
+    separate pieces (a single 2019→2020 step; from 2020 they rank 113 and 464), and a canalised
+    drain mapped as a lake (#31). 9 doubtful.
+  - **Readability does not pick the real losses:** 4 of the 40 are readable, 1 of the 8. A sudden
+    loss inflates scatter, the bias logged with the criteria, so the flag is kept as information,
+    not a filter.
+  - **Spot-checked by the main session** against the photos: Ramapura, Heelalige, Guni Agrahara,
+    Chittekarepalya — agree.
+- 2026-09-28 — **M4 closed (Claude's call, provisional).** The done-when is met: a list of specific
+  lakes where vegetation was lost within 30 m of mapped water, each photo-checked. The story beat for
+  M7 is "8 lakes where land in the ring was built on or cleared", with the lake-works finding beside
+  it; which of the two leads is Aditya's editorial call.
 
 ## Parked: the property/quality matrix
 

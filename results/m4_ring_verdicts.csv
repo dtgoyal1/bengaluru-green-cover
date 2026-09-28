@@ -1,0 +1,41 @@
+osm,name,ha,rank,rank_from_2020,change,readable,scatter,clean_px,ring_water_2019,ring_water_2026,verdict,note,checked
+r19353942,Ramapura Kere,51.792,1,1,-0.4188,False,0.1353,758,0.0,0.0,lake works,Ramapura Kere: lake bed dug up 2021-24 and bunds rebuilt; the ring also runs between OSM's strip pieces on the west (same site as M2 rank 2),2026-09-28
+w44707273,Horamavu Lake,4.624,2,2,-0.3026,False,0.0926,246,0.0,0.0,lake works,"Horamavu: drained 2023-24, new bund and walking path laid round the whole shore",2026-09-28
+r19579350,Heelalige Lake,6.664,3,6,-0.2896,False,0.0806,239,0.017,0.0,lake works,"Heelalige: wide bare bund rebuilt round the lake, drained 2024",2026-09-28
+r19751547;w1409994956,Bellandur Lake,315.798,4,113,-0.2501,False,0.0761,2423,0.0,0.0,outline artefact,"Bellandur: OSM pieces leave lake bed and marsh inside the ring; the loss is one step 2019-20 (weed and desilting), rank 113 from 2020",2026-09-28
+w33300618,Hoodi Lake,7.685,5,8,-0.2323,False,0.0536,292,0.058,0.0,lake works,Hoodi: bund and path rebuilt; a construction site also cuts into the north ring,2026-09-28
+w37898906,Mallathahalli Lake,12.862,6,10,-0.2322,False,0.0764,378,0.074,0.005,lake works,"Mallathahalli: bare bund and paved walkway built round the lake, drained 2022 and 2024",2026-09-28
+w148216683,Gunjuru Lake,20.615,7,7,-0.2144,False,0.0499,461,0.0,0.0,lake works,"Gunjur: dry bed scraped with tracks, bund road round it; ring vegetation cleared with the works",2026-09-28
+r19306126,Varthur Lake,154.323,8,464,-0.2047,False,0.0886,1476,0.0,0.0,outline artefact,"Varthur: strip pieces put lake bed inside the ring; the loss is the 2019-20 weed clearing, rank 464 from 2020",2026-09-28
+w1254929806,,1.355,9,4,-0.1911,False,0.0623,140,0.0,0.0,real loss,Shivaram Karanth Layout (Guni Agrahara): layout road laid along the west ring and the surroundings scraped from 2024,2026-09-28
+w232880644,,2.895,10,3,-0.1901,False,0.0569,219,0.0,0.0,real loss,"Dooravaninagar: road widening on the west and rail works along the south edge, 2024-26",2026-09-28
+w75610567,Chikkabanavara Lake,32.294,11,5,-0.1839,False,0.08,599,0.002,0.0,lake works,"Chikkabanavara: drained 2025, bund rebuilt round the lake",2026-09-28
+w1254929805,Lakshmipura Lake,1.854,12,11,-0.174,False,0.062,160,0.0,0.0,lake works,"Lakshmipura: new bund and path, drained 2024-25; a new layout surrounds it",2026-09-28
+w1039322029,Medi Agrahara Lake,5.578,13,12,-0.1721,False,0.0594,278,0.0,0.0,real loss,"Medi Agrahara: layout road grid built up to the shore, the east road inside the ring, 2024",2026-09-28
+w1176859303,,1.346,14,15,-0.1667,False,0.0363,128,0.008,0.398,water arrived,"quarry pit near Sadahalli, not a tank: water rose into the ring from 1% (2019) to 40% (2026)",2026-09-28
+w1110948089,Shikaripalya Lake,1.32,15,19,-0.1568,False,0.0413,106,0.0,0.0,doubtful,"Shikaripalya (1.3 ha): the tank is re-cut into ponds by new dirt roads in 2022; lake works or a layout, can't tell",2026-09-28
+w41667654,Abbigere Lake,9.427,16,9,-0.152,False,0.0413,349,0.0,0.0,lake works,"Abbigere: bund rebuilt and planted, drained 2023-24",2026-09-28
+w171771792,Shikaripalya Lake,3.19,17,28,-0.1517,False,0.0362,177,0.0,0.0,doubtful,"Shikaripalya (3.2 ha, same tank as #15): dirt roads through it and a walled compound on the south edge; mixed",2026-09-28
+w1512678693,Kadiganahalli Tank,3.338,18,14,-0.1455,False,0.0721,172,0.0,0.0,lake works,"Kadiganahalli Tank: new bund road round the tank, drained 2025; earthworks beside it",2026-09-28
+r14671536;w1210203298;w1210203299,Thubarahalli Lake,7.093,19,35,-0.1449,False,0.0445,323,0.0,0.0,real loss,"Thubarahalli: towers built on the east edge inside the ring, loss 2019-22 then flat",2026-09-28
+w1178402476,Chittekarepalya Lake,1.096,20,17,-0.1382,True,0.0206,122,0.0,0.0,real loss,"Chittekarepalya (readable): sheds built on the south edge inside the ring, 2025-26",2026-09-28
+w1254929807,Bylakere Lake,5.265,21,22,-0.1347,False,0.0538,224,0.0,0.0,real loss,"Bylakere: layout roads and plots laid round the lake 2020-23, construction at the south tip",2026-09-28
+w130111880,Nallurahalli Lake,8.857,22,26,-0.1294,False,0.0596,351,0.037,0.0,lake works,"Nallurahalli: drained 2021 and 2024 for rejuvenation, bund and path",2026-09-28
+w1118946163,Gubbalala Kere,1.964,23,25,-0.1289,False,0.0688,153,0.0,0.0,lake works,"Gubbalala: drained 2021 and 2024, walkway round the shore",2026-09-28
+w1077022613,,7.397,24,66,-0.1255,False,0.0526,286,0.0,0.0,lake works,unnamed 7.4 ha: bund road round it and desilting pits; a shed on the north edge,2026-09-28
+w597564903,Doddabidirakallu Kere,11.469,25,201,-0.1212,False,0.0373,367,0.0,0.0,doubtful,"Doddabidirakallu: the whole drop is 2019-20 (rank 201 from 2020); dry bed since, nothing new built in the ring",2026-09-28
+w779078393,Nagaraesh Nagenahalli Lake,2.007,26,43,-0.1173,False,0.0306,143,0.0,0.0,lake works,"Nagenahalli: rejuvenated 2022, new bund and path (seen in the lake-definition sample too)",2026-09-28
+r3816212,Mathikere Lake,4.315,27,18,-0.1102,False,0.0608,461,0.0,0.0,weed/marsh swing,Mathikere: park woods in the ring unchanged; the marshy lake bed dried out from 2022,2026-09-28
+w172651060,Mylasandra Tank,3.164,28,70,-0.11,True,0.0224,184,0.0,0.0,doubtful,"Mylasandra Tank (readable): gradual decline, road on the west already there in 2019; nothing visible",2026-09-28
+w227097881,Doddkammanahalli Lake,4.821,29,13,-0.1099,False,0.0584,295,0.0,0.0,lake works,"Doddkammanahalli: drained 2021-22, bund and path rebuilt",2026-09-28
+w170311560,Yarandahalli Kere,3.232,30,48,-0.1005,False,0.0267,190,0.0,0.0,real loss,Yarandahalli Kere: tank bed scraped 2023 and a building up on the north-east edge inside the ring by 2025,2026-09-28
+w367594183,,1.51,31,23,-0.1005,False,0.0369,326,0.0,0.0,outline artefact,"Bellandur area: a canalised drain mapped as natural=water, not a lake; the construction round it is real but not a lake buffer",2026-09-28
+w35927597,Dodda Gubbi Kere,38.544,32,38,-0.099,False,0.0459,613,0.0,0.003,doubtful,Dodda Gubbi Kere: ring edge greenness peaks 2022 when the lake refilled; nothing built,2026-09-28
+w171780901,,6.593,33,111,-0.0973,False,0.0859,263,0.0,0.0,doubtful,"unnamed 6.6 ha: drop is 2019-21 (rank 111 from 2020), dry bed and fields since; nothing built",2026-09-28
+w987608929,Kachanayakanahalli lake,8.721,34,59,-0.0959,True,0.0206,297,0.0,0.0,lake works,"Kachanayakanahalli (readable): drained 2026 for works, bund road; the layout to the south-west predates 2019",2026-09-28
+r19509700,Arekere Lake,7.523,35,39,-0.0957,False,0.0322,313,0.0,0.0,doubtful,"Arekere: small drop in 2025, road and buildings on the north edge already there; nothing clearly new",2026-09-28
+r15546653;w170333546,Kitthiganahalli Bommasandra Lake,7.551,36,36,-0.0945,False,0.0935,289,0.003,0.0,lake works,"Kitthiganahalli Bommasandra: drained 2021, bund, island and path built",2026-09-28
+r19470041,Thalaghattapura Lake,4.078,37,46,-0.0935,False,0.0601,261,0.0,0.0,lake works,"Thalaghattapura: drained 2021, bund and walkway",2026-09-28
+w1189065715,,3.88,38,124,-0.0908,False,0.0704,262,0.0,0.0,doubtful,"unnamed 3.9 ha: dry bed in eucalyptus and fields, noisy up-and-down (rank 124 from 2020)",2026-09-28
+w1180240726,,4.086,39,120,-0.0905,True,0.0241,256,0.0,0.0,doubtful,"unnamed 4.1 ha (readable): dry scrubby bed, slow decline, nothing visible (rank 120 from 2020)",2026-09-28
+w41668782,,4.424,40,51,-0.0881,False,0.0315,204,0.0,0.0,real loss,"Mallapura, Nelamangala: polyhouse and building on the south-east edge inside the ring, 2025-26",2026-09-28
