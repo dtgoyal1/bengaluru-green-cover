@@ -25,11 +25,15 @@ pins. Scope confirmed by Aditya 2026-09-28/29: loss of green cover, and loss ins
 zones; lake works do not count; **no gains anywhere on the site**.
 
 **M6 spec (agreed 2026-09-29 on the mockup, https://claude.ai/artifact/L7fTNUpp9zhjyeSSMB6Av7):**
-opens on the 2019 | 2026 photo swipe alone; the change hexes are one click away and colour loss
-only; 38 pins (30 hex losses, 8 lake-ring losses with the ring drawn), all shown at once; a card per
-pin with the verdict, note, Sentinel-2 before/after crops, the 2019-2026 line and the 2020-start
-check; three standing captions. Out: a city-wide score, lake works, doubtful places as pins, gains,
-water, drains, the per-pixel change map, current-law claims, Esri photos.
+two pages. **Front page, visuals only:** headline, the full-width 2019 | 2026 photo swipe, one button
+that shows the loss-only hexes (off at load), dots for *places* (neighbouring checked hexes merge
+into one place, each lake is one place), a card per place (name, one plain sentence, Sentinel-2
+before/after, a link to the method; no ranks, scores or verdict labels), a strip of places below
+the map, locality search, a one-line footer. **"How it was made" page:** what was measured, the
+city-average comparison, hexes and the lake mask, the photo check, lake buffers with a band diagram,
+what this cannot see, the full table of every place (rank, 2020 re-rank, change, verdict, note),
+sources. **Not shipped:** gains, lake works, doubtful places, a city-wide score, water, drains, the
+per-pixel change map, readability and grid-check internals, Esri photos.
 
 **M4's result:** `results/m4_ring_verdicts.csv` — the 40 biggest losses in the outer 20 m of the
 30 m ring round the 590 OSM lakes of 1 ha or more, each photo-checked: **8 real loss**, 18 lake
@@ -953,6 +957,13 @@ Append one line per session. Date, what changed, why.
   09-28 Jarakabandekaval pick is moot; the gains check stays as the record). Claude's calls,
   provisional: all 38 pins show at once (few enough not to crowd), and the card's crops are
   Sentinel-2 (coarse for a single shed, but the Esri photos cannot be published).
+- 2026-09-29 — **Front page carries visuals only; method and assumptions get their own page.**
+  Aditya's call. The mockup's captions, verdict chips, ranks and the 2020 check move off the front
+  page into "How it was made", which also holds the full per-place table. Claude's call,
+  provisional: **dots are places, not hexes** — in the mockup window the 11 checked Shivaram
+  Karanth Layout hexes are one dot ("11 of the city's 30 checked losses are here"), since eleven
+  identical dots tell one story badly. M5 therefore needs a place grouping (neighbouring checked
+  hexes merged, one plain sentence per place) alongside the hex table.
 
 ## Parked: the property/quality matrix
 
