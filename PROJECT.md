@@ -19,10 +19,17 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 **M3 dropped 2026-09-28.** **M2 closed 2026-09-27.**
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** M5, static export: GeoJSON + PMTiles (endpoint years as raster, middle years as
-vector stats, max zoom z14). Scope confirmed by Aditya 2026-09-28: loss of green cover, and loss
-inside protected zones; lake works do not count. Still provisional: the M7 counter-example (the
-Jarakabandekaval plantation; no gain is a lake restoration).
+**Next action:** M5, static export, scoped to the M6 spec below: 2019 and 2026 true-colour PMTiles
+(max zoom z14), loss-only hexes as GeoJSON, the 30 checked hex losses and 8 lake-ring losses as
+pins. Scope confirmed by Aditya 2026-09-28/29: loss of green cover, and loss inside protected
+zones; lake works do not count; **no gains anywhere on the site**.
+
+**M6 spec (agreed 2026-09-29 on the mockup, https://claude.ai/artifact/L7fTNUpp9zhjyeSSMB6Av7):**
+opens on the 2019 | 2026 photo swipe alone; the change hexes are one click away and colour loss
+only; 38 pins (30 hex losses, 8 lake-ring losses with the ring drawn), all shown at once; a card per
+pin with the verdict, note, Sentinel-2 before/after crops, the 2019-2026 line and the 2020-start
+check; three standing captions. Out: a city-wide score, lake works, doubtful places as pins, gains,
+water, drains, the per-pixel change map, current-law claims, Esri photos.
 
 **M4's result:** `results/m4_ring_verdicts.csv` — the 40 biggest losses in the outer 20 m of the
 30 m ring round the 590 OSM lakes of 1 ha or more, each photo-checked: **8 real loss**, 18 lake
@@ -246,9 +253,10 @@ GeoJSON + PMTiles. Endpoint years as raster, middle years as vector stats.
 
 ### 6 — Frontend: swipe comparison
 2019 vs 2026 draggable divider. Build this first — it's the centerpiece and everything else hangs off it.
+Spec agreed 2026-09-29 — see Status.
 
 ### 7 — Scrollytelling + locality search
-Scrollama beats: city-wide → the worst-hit hexes → buffer violations → a counter-example where green was gained. Then a search box so people can look up their own locality.
+Scrollama beats: city-wide → the worst-hit hexes → buffer violations. ~~A counter-example where green was gained~~ — dropped 2026-09-29 with gains. Then a search box so people can look up their own locality.
 
 ### 8 — Polish and post
 Small-multiples grid of the biggest-change hexes as the preview image. Record a 20s screen capture of the swipe; post it natively (LinkedIn suppresses posts with outbound links) and put the URL in the first comment.
@@ -938,6 +946,13 @@ Append one line per session. Date, what changed, why.
   09-27 and its M4 twin. Scope is loss of green cover, and loss inside protected zones; a bund,
   walkway or desilting by the lake's own custodian is neither. So M4's headline is the 8 real
   losses, and the 18 lake works are context at most.
+- 2026-09-29 — **M6 spec agreed on a working mockup** (a private artifact built from real imagery and
+  results over the north-west fringe; build files not in the repo). Aditya's calls: the page opens on
+  photos only with the change hexes a click away, and **gains are out of the site entirely** — no
+  gain pins, the hex layer colours loss only, and M7's counter-example beat is dropped (so the
+  09-28 Jarakabandekaval pick is moot; the gains check stays as the record). Claude's calls,
+  provisional: all 38 pins show at once (few enough not to crowd), and the card's crops are
+  Sentinel-2 (coarse for a single shed, but the Esri photos cannot be published).
 
 ## Parked: the property/quality matrix
 
