@@ -15,14 +15,21 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 
 ## Status
 
-**Current milestone:** 5 — static export. **M4 closed 2026-09-28** (provisionally, by Claude).
-**M3 dropped 2026-09-28.** **M2 closed 2026-09-27.**
+**Current milestone:** 6 — the site, built for real from `site/data/`. **M5 closed 2026-09-29.**
+**M4 closed 2026-09-28** (provisionally, by Claude). **M3 dropped 2026-09-28.** **M2 closed 2026-09-27.**
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** M5, static export, scoped to the M6 spec below: 2019 and 2026 true-colour PMTiles
-(max zoom z14), loss-only hexes as GeoJSON, the 30 checked hex losses and 8 lake-ring losses as
-pins. Scope confirmed by Aditya 2026-09-28/29: loss of green cover, and loss inside protected
-zones; lake works do not count; **no gains anywhere on the site**.
+**Next action:** M6 for real: a static page in `site/` reading `site/data/` (MapLibre + the
+PMTiles protocol), opening at city scale so the two fronts show — the north-west (Shivaram Karanth
+Layout and its three lakes) and the east (Varthur to Hoskote). Scope confirmed by Aditya
+2026-09-28/29: loss of green cover, and loss inside protected zones; lake works do not count; **no
+gains anywhere on the site**.
+
+**M5's result, `site/data/`:** `2019.pmtiles` and `2026.pmtiles` (13 Feb 2019 and 6 Feb 2026, one
+pass each, z8-14, WebP, 13.8 and 15.0 MB, gitignored — `export_tiles.py`), `hexes.geojson` (loss
+only), `places.geojson` (22 places: 11 east, 5 north-west, 6 elsewhere; copy in `site/places.csv`),
+`outlines.geojson`, `boundary.geojson`, `details.json` (the 38 checked losses for the method page) —
+`export_vectors.py` — and `crops/` (44 card photos at native 10 m — `export_crops.py`).
 
 **M6 spec (agreed 2026-09-29 on the mockup, https://claude.ai/artifact/L7fTNUpp9zhjyeSSMB6Av7):**
 two pages. **Front page, visuals only:** headline, the full-width 2019 | 2026 photo swipe, one button
@@ -252,7 +259,7 @@ mapped water, the outer 20 m of it.
   contested between sources. The claim is about land protected when the period began. Verify
   current rules before publishing any claim here — this is the section most likely to be challenged.
 
-### 5 — Static export
+### 5 — Static export — **CLOSED 2026-09-29**
 GeoJSON + PMTiles. Endpoint years as raster, middle years as vector stats.
 
 ### 6 — Frontend: swipe comparison
@@ -980,6 +987,25 @@ Append one line per session. Date, what changed, why.
   yellow-to-dark-red for contrast on brown soil; the headline carries the number (30 stretches of
   farmland, 8 lakes); the method page opens with a plain three-line summary. The two Shivaram
   Karanth Layout clusters (9 and 2 hexes) are now two places, by the neighbouring-hexes rule.
+- 2026-09-29 — **M5 closed: the static export** (Claude's calls throughout, provisional).
+  - **The story is two fronts, and it is only visible city-wide.** Grouping the 30 checked hex losses
+    by neighbours and adding the 8 lake-ring losses gives 22 places: 11 on the east (Varthur,
+    Panathur, K Dommasandra out to Kolathuru and the Hoskote side), 5 in the north-west (the two
+    Shivaram Karanth Layout blocks and Medi Agrahara, Guni Agrahara and Bylakere lakes), 6
+    scattered. Aditya noted the one-window mockup showed no story; M6 opens at city scale for this.
+  - **Photos: 13 Feb 2019 and 6 Feb 2026, one pass each.** The study area is two tiles (43PGQ,
+    43PHQ) on relative orbit 19. 11 Feb 2026, the mockup's day, has 11.6% cloud on 43PHQ, so it
+    cannot serve the whole city. On three stable built-up patches the chosen pair differs in
+    brightness by -6.7, +3.6 and -2.4 (no one-way bias) with similar sharpness.
+  - **Tiles fetched from Earth Engine's own map tiles** and packed with the `pmtiles` package, so no
+    GDAL or tippecanoe is needed: 792 tiles a year, about 3 minutes each.
+  - **Middle years are not exported.** The M6 spec no longer shows the eight-year line anywhere, so
+    the "middle years as vector stats" half of the M5 plan has no reader. Reopen if M7 needs it.
+  - **Place copy is editorial and lives in `site/places.csv`**, one plain sentence per place written
+    from the photo-check notes, keyed by the top-ranked hex or the lake's OSM id. `export_vectors.py`
+    fails if a place has no copy row or a copy row matches no place.
+  - **Card photos need `filterBounds`:** a date-prefix filter alone makes Earth Engine mosaic every
+    scene on Earth from that day and time out.
 
 ## Parked: the property/quality matrix
 

@@ -1,0 +1,344 @@
+[
+ {
+  "place": "k-dommasandra",
+  "name": "K Dommasandra and Kumbena Agrahara",
+  "kind": "ground",
+  "rank": 1,
+  "rank_from_2020": 4,
+  "locality": "Kumbena Agrahara",
+  "note": "fields and mapped wetland patches scraped and built on from 2023"
+ },
+ {
+  "place": "k-dommasandra",
+  "name": "K Dommasandra and Kumbena Agrahara",
+  "kind": "ground",
+  "rank": 3,
+  "rank_from_2020": 9,
+  "locality": "K Dommasandra",
+  "note": "green valley along a wetland channel, cleared for development from 2024"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 4,
+  "rank_from_2020": 2,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: farmland scraped, road grid laid 2024"
+ },
+ {
+  "place": "ramapura",
+  "name": "Ramapura",
+  "kind": "ground",
+  "rank": 5,
+  "rank_from_2020": 8,
+  "locality": "Ramapura",
+  "note": "buildings spreading across farmland year after year; lake works at the south edge"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 6,
+  "rank_from_2020": 3,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: cleared 2024"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 7,
+  "rank_from_2020": 5,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: road grid by 2025"
+ },
+ {
+  "place": "k-dommasandra",
+  "name": "K Dommasandra and Kumbena Agrahara",
+  "kind": "ground",
+  "rank": 8,
+  "rank_from_2020": 16,
+  "locality": "Doddabanahalli",
+  "note": "large construction site from 2023"
+ },
+ {
+  "place": "panathur",
+  "name": "Panathur and the Varthur shore",
+  "kind": "ground",
+  "rank": 9,
+  "rank_from_2020": 26,
+  "locality": "Panathur",
+  "note": "green plots inside the settlement built over, steadily from 2020"
+ },
+ {
+  "place": "varthur",
+  "name": "Varthur",
+  "kind": "ground",
+  "rank": 10,
+  "rank_from_2020": 29,
+  "locality": "Bengaluru East City Corporation",
+  "note": "vegetated land west of the wetland cleared for construction from 2023; the wetland itself stays"
+ },
+ {
+  "place": "varthur",
+  "name": "Varthur",
+  "kind": "ground",
+  "rank": 11,
+  "rank_from_2020": 18,
+  "locality": "Bengaluru East City Corporation",
+  "note": "dense green wetland valley thins from 2023; fields to the south built on"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 12,
+  "rank_from_2020": 6,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: farmland scraped, road grid 2024"
+ },
+ {
+  "place": "varthur",
+  "name": "Varthur",
+  "kind": "ground",
+  "rank": 13,
+  "rank_from_2020": 19,
+  "locality": "Varthur",
+  "note": "land beside Varthur Lake scraped from 2023, construction by 2026"
+ },
+ {
+  "place": "shivaram-karanth-layout-east",
+  "name": "Shivaram Karanth Layout, east block",
+  "kind": "ground",
+  "rank": 14,
+  "rank_from_2020": 17,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: road grid 2024"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 16,
+  "rank_from_2020": 11,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: scraped 2024, road grid 2025"
+ },
+ {
+  "place": "kolathuru",
+  "name": "Kolathuru",
+  "kind": "ground",
+  "rank": 17,
+  "rank_from_2020": 21,
+  "locality": "Kolathuru",
+  "note": "farmland: STRR highway through it in 2022, a large warehouse in 2024"
+ },
+ {
+  "place": "channasandra",
+  "name": "Channasandra",
+  "kind": "ground",
+  "rank": 18,
+  "rank_from_2020": 27,
+  "locality": "Channasandra",
+  "note": "green block in the north-east scraped 2023-26, another site to the south-east"
+ },
+ {
+  "place": "mutsandra",
+  "name": "Mutsandra",
+  "kind": "ground",
+  "rank": 19,
+  "rank_from_2020": 33,
+  "locality": "Mutsandra",
+  "note": "farmland turned into a construction site from 2022"
+ },
+ {
+  "place": "panathur",
+  "name": "Panathur and the Varthur shore",
+  "kind": "ground",
+  "rank": 20,
+  "rank_from_2020": 72,
+  "locality": "Varthur",
+  "note": "steady building on the Varthur shore; about half the drop is 2019 to 2020 along the lake edge, possibly weed at the shore; rank depends on 2019: rank 72 if the start year is 2020"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 21,
+  "rank_from_2020": 7,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: road grid 2024"
+ },
+ {
+  "place": "gudimavu",
+  "name": "Gudimavu",
+  "kind": "ground",
+  "rank": 22,
+  "rank_from_2020": 34,
+  "locality": "Gudimavu",
+  "note": "plantation rows and fields, cleared in the centre by 2026"
+ },
+ {
+  "place": "varthur",
+  "name": "Varthur",
+  "kind": "ground",
+  "rank": 23,
+  "rank_from_2020": 67,
+  "locality": "Varthur",
+  "note": "fields east of Varthur built on, steadily; rank depends on 2019: rank 67 if the start year is 2020"
+ },
+ {
+  "place": "tagachaguppe",
+  "name": "Tagachaguppe",
+  "kind": "ground",
+  "rank": 25,
+  "rank_from_2020": 35,
+  "locality": "Tagachaguppe",
+  "note": "north half built as a layout from 2021; the big green field in the south stays"
+ },
+ {
+  "place": "hirandahalli",
+  "name": "Hirandahalli",
+  "kind": "ground",
+  "rank": 27,
+  "rank_from_2020": 36,
+  "locality": "Hirandahalli",
+  "note": "fields and wetland edges cleared in the centre 2025-26, steady decline before that"
+ },
+ {
+  "place": "gattahalli",
+  "name": "Gattahalli",
+  "kind": "ground",
+  "rank": 30,
+  "rank_from_2020": 12,
+  "locality": "Gattahalli",
+  "note": "fields south of Gattahalli Lake built on 2024-26"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 32,
+  "rank_from_2020": 14,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: road grid 2024"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 33,
+  "rank_from_2020": 22,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: road grid 2024"
+ },
+ {
+  "place": "shivaram-karanth-layout",
+  "name": "Shivaram Karanth Layout",
+  "kind": "ground",
+  "rank": 35,
+  "rank_from_2020": 31,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout (hex B of the deep dive): scraped 2024"
+ },
+ {
+  "place": "bhaktarahalli",
+  "name": "Bhaktarahalli",
+  "kind": "ground",
+  "rank": 36,
+  "rank_from_2020": 40,
+  "locality": "Bhaktarahalli",
+  "note": "fields to sheds and buildings from 2022, construction 2024-26"
+ },
+ {
+  "place": "shivaram-karanth-layout-east",
+  "name": "Shivaram Karanth Layout, east block",
+  "kind": "ground",
+  "rank": 37,
+  "rank_from_2020": 30,
+  "locality": "Dr. Shivaram Karanth Layout",
+  "note": "Shivaram Karanth Layout: road grid 2024"
+ },
+ {
+  "place": "k-dommasandra",
+  "name": "K Dommasandra and Kumbena Agrahara",
+  "kind": "ground",
+  "rank": 40,
+  "rank_from_2020": 39,
+  "locality": "K Dommasandra",
+  "note": "dark green field in the south cleared from 2022; construction to the north-east 2024-26"
+ },
+ {
+  "place": "guni-agrahara-lake",
+  "name": "Lake at Guni Agrahara",
+  "kind": "lake",
+  "rank": 9,
+  "rank_from_2020": 4,
+  "locality": null,
+  "note": "Shivaram Karanth Layout (Guni Agrahara): layout road laid along the west ring and the surroundings scraped from 2024"
+ },
+ {
+  "place": "dooravaninagar-lake",
+  "name": "Lake at Dooravaninagar",
+  "kind": "lake",
+  "rank": 10,
+  "rank_from_2020": 3,
+  "locality": null,
+  "note": "Dooravaninagar: road widening on the west and rail works along the south edge, 2024-26"
+ },
+ {
+  "place": "medi-agrahara-lake",
+  "name": "Medi Agrahara Lake",
+  "kind": "lake",
+  "rank": 13,
+  "rank_from_2020": 12,
+  "locality": null,
+  "note": "Medi Agrahara: layout road grid built up to the shore, the east road inside the ring, 2024"
+ },
+ {
+  "place": "thubarahalli-lake",
+  "name": "Thubarahalli Lake",
+  "kind": "lake",
+  "rank": 19,
+  "rank_from_2020": 35,
+  "locality": null,
+  "note": "Thubarahalli: towers built on the east edge inside the ring, loss 2019-22 then flat"
+ },
+ {
+  "place": "chittekarepalya-lake",
+  "name": "Chittekarepalya Lake",
+  "kind": "lake",
+  "rank": 20,
+  "rank_from_2020": 17,
+  "locality": null,
+  "note": "Chittekarepalya (readable): sheds built on the south edge inside the ring, 2025-26"
+ },
+ {
+  "place": "bylakere-lake",
+  "name": "Bylakere Lake",
+  "kind": "lake",
+  "rank": 21,
+  "rank_from_2020": 22,
+  "locality": null,
+  "note": "Bylakere: layout roads and plots laid round the lake 2020-23, construction at the south tip"
+ },
+ {
+  "place": "yarandahalli-kere",
+  "name": "Yarandahalli Kere",
+  "kind": "lake",
+  "rank": 30,
+  "rank_from_2020": 48,
+  "locality": null,
+  "note": "Yarandahalli Kere: tank bed scraped 2023 and a building up on the north-east edge inside the ring by 2025"
+ },
+ {
+  "place": "mallapura-lake",
+  "name": "Lake at Mallapura, Nelamangala",
+  "kind": "lake",
+  "rank": 40,
+  "rank_from_2020": 51,
+  "locality": null,
+  "note": "Mallapura, Nelamangala: polyhouse and building on the south-east edge inside the ring, 2025-26"
+ }
+]

@@ -2,6 +2,7 @@ earthengine-api==1.7.42
 geopandas==1.1.4
 h3==4.5.0
 pandas==3.0.5
+pmtiles==3.4.1
 
 # notebook (milestone 1 walkthrough)
 jupyterlab==4.6.3

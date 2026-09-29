@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 
-data/
+/data/
 out/
 *.tif
 *.tiff
@@ -29,3 +29,7 @@ results/m4_lake_sample/*/*.jpg
 # ring-loss frames (Esri photos are for viewing, not redistribution), regenerate with
 #   python render_ring_losses.py
 results/m4_ring_photos/
+
+# site data: the GeoJSON and card photos are small and committed; the photo tiles
+# (~29 MB) regenerate with  python export_tiles.py  (cached tiles under out/)
+!site/data/*.geojson
