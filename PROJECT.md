@@ -964,6 +964,22 @@ Append one line per session. Date, what changed, why.
   Karanth Layout hexes are one dot ("11 of the city's 30 checked losses are here"), since eleven
   identical dots tell one story badly. M5 therefore needs a place grouping (neighbouring checked
   hexes merged, one plain sentence per place) alongside the hex table.
+- 2026-09-29 — **The swipe shows two single clear days, not the season median** (Claude's call,
+  provisional, after Aditya saw 2019 look softer and duller). Measured on a stable built-up patch
+  (77.555-77.585E, 13.072-13.092N): single cloud-free days are equally sharp in both years (edge
+  energy 4,100-4,650), but the 2019 Feb-Mar median is about 20% softer (3,223 vs 3,997) because it
+  takes in hazy late-March days (19-25 and 30 Mar read bright and soft). Not misregistration: the
+  2019 scenes are the reprocessed baseline 05.00. The pair **13 Feb 2019 / 11 Feb 2026** (both 0%
+  cloud, same point in the season) matches on that patch (brightness 86.6 vs 84.5). Numbers keep
+  using the median; the method page says so. **For M5:** the study area spans several Sentinel-2
+  tiles, so each endpoint must be a same-day mosaic of one satellite pass, chosen by the same test.
+- 2026-09-29 — **Mockup user-tested by an agent; fixes folded in.** Card crops are now fetched at
+  native 10 m per place (the page-wide crop blown up 2x showed nothing); tapping after a drag hits
+  what is under the finger; dots keep a 32 px touch target; the search says when nothing matches;
+  the divider opens at 30% so the dots show 2026; a two-item key sits on the map; the loss ramp is
+  yellow-to-dark-red for contrast on brown soil; the headline carries the number (30 stretches of
+  farmland, 8 lakes); the method page opens with a plain three-line summary. The two Shivaram
+  Karanth Layout clusters (9 and 2 hexes) are now two places, by the neighbouring-hexes rule.
 
 ## Parked: the property/quality matrix
 
