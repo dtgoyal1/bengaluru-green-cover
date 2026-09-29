@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bengaluru green ground</title>
+<meta name="description" content="Where Bengaluru's green ground went between 2019 and 2026: a satellite swipe of the city's edge, and every place we checked by eye.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2212%22 fill=%22%23ef7a3c%22 stroke=%22white%22 stroke-width=%223%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="wrap site-bar">
+	<a class="site-name" href="index.html">Bengaluru <span>green ground</span></a>
+	<nav class="nav" aria-label="Site">
+		<a href="index.html" aria-current="page">Map</a>
+		<a href="method.html">How it was made</a>
+		<form class="search" id="search" role="search">
+			<input id="q" type="search" placeholder="Find a place" aria-label="Find a place" autocomplete="off">
+			<span class="searchmsg" id="qmsg" aria-live="polite"></span>
+		</form>
+	</nav>
+</header>
+
+<main>
+	<section class="wrap hero">
+		<h1>Where Bengaluru's green ground went</h1>
+		<p class="stat" id="stat">Since 2019, stretches of farmland and scrub on the city's edge were scraped bare, and lakes had roads and buildings pushed up to their water.</p>
+		<p class="how">Drag the handle to compare February 2019 with February 2026. Tap a dot to see what happened there.</p>
+		<div class="fronts" id="fronts"></div>
+	</section>
+
+	<div class="wrap">
+		<div class="stage" id="stage">
+			<div class="map" id="map-before" aria-label="Satellite map, 13 February 2019"></div>
+			<div class="map" id="map-after" aria-label="Satellite map, 6 February 2026"></div>
+			<div class="divider" aria-hidden="true"></div>
+			<button class="knob" id="knob" type="button" role="slider" aria-label="Swipe between 2019 and 2026" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">‹ ›</button>
+			<span class="year l">13 Feb 2019</span>
+			<span class="year r">6 Feb 2026</span>
+			<button class="reset" id="reset" type="button" hidden>Whole city</button>
+			<div class="float">
+				<button type="button" class="pill" id="hexbtn" aria-pressed="false">Show where green was lost</button>
+				<div class="minilegend" id="minilegend" hidden><span>Green lost: a little</span><i></i><span>a lot</span></div>
+			</div>
+			<div class="mapkey" aria-hidden="true">
+				<span><i class="dotkey" style="background:var(--loss)"></i>Green ground lost</span>
+				<span><i class="dotkey" style="background:var(--ring)"></i>Built within 30 m of a lake</span>
+			</div>
+			<div class="card" id="card" aria-live="polite" hidden></div>
+		</div>
+	</div>
+
+	<section class="wrap places" aria-labelledby="h-places">
+		<h2 id="h-places">Places that lost their green</h2>
+		<div id="groups"></div>
+	</section>
+</main>
+
+<footer class="wrap site-foot">
+	<span>Imagery: contains modified Copernicus Sentinel-2 data, 13 February 2019 and 6 February 2026. Lakes and names © OpenStreetMap contributors.</span>
+	<a href="method.html">How it was made →</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pmtiles@3.2.1/dist/pmtiles.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

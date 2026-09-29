@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How it was made · Bengaluru green ground</title>
+<meta name="description" content="How the Bengaluru green ground map was made: what was measured, how every place was checked, and what it cannot see.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2212%22 fill=%22%23ef7a3c%22 stroke=%22white%22 stroke-width=%223%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="wrap site-bar">
+	<a class="site-name" href="index.html">Bengaluru <span>green ground</span></a>
+	<nav class="nav" aria-label="Site">
+		<a href="index.html">Map</a>
+		<a href="method.html" aria-current="page">How it was made</a>
+	</nav>
+</header>
+
+<main class="wrap methods">
+	<nav class="toc" aria-label="On this page">
+		<span class="eyebrow">On this page</span>
+		<a href="#measured">What was measured</a>
+		<a href="#fair">Comparing years fairly</a>
+		<a href="#hexes">From squares to hexagons</a>
+		<a href="#checking">Checking by eye</a>
+		<a href="#lakes">Lake buffers</a>
+		<a href="#limits">What this cannot see</a>
+		<a href="#places">Every place, in detail</a>
+		<a href="#sources">Sources</a>
+	</nav>
+	<article class="article">
+		<header style="display:grid;gap:10px">
+			<span class="eyebrow">How it was made</span>
+			<h1>Method, assumptions and limits</h1>
+			<p class="lead">In short: we measured how green every 10 m square of Bengaluru and its edge was each February and March from 2019 to 2026. We ranked the places that lost the most, and a person checked each one against the photos. Only losses that are plainly visible, like fields scraped for a road grid, are on the map.</p>
+		</header>
+
+		<section id="measured">
+			<h2>What was measured</h2>
+			<p>Greenness, using a standard measure called NDVI, from the European Space Agency's free Sentinel-2 satellites, at 10 m a pixel. The area is the Greater Bengaluru Authority plus a 10 km ring around it, 2,175 km² in all. For each year from 2019 to 2026, every clear picture from February and March is combined into one typical picture for the season. The dry season is used because after the monsoon everything is green and nothing can be compared.</p>
+			<p>2016 to 2018 are left out: too few corrected pictures exist for those years to see through cloud.</p>
+			<p>The photos you swipe are two single clear days from the same point in the season, 13 February 2019 and 6 February 2026, so haze does not make one year look duller than the other. The numbers use every clear day of February and March.</p>
+		</section>
+
+		<section id="fair">
+			<h2>Comparing years fairly</h2>
+			<p>A wet February makes the whole city greener than a dry one. So each year's greenness is measured against the city's own average for that year, and change means a place moved against the rest of the city. Without this step, one rainy year would look like a city-wide recovery.</p>
+		</section>
+
+		<section id="hexes">
+			<h2>From squares to hexagons</h2>
+			<p>The 10 m squares are averaged into 2,868 hexagons of about 0.76 km² each. Squares inside mapped lakes, ponds and reservoirs are removed first, the same ones every year, because a weed-covered lake reads as dense green and a cleared one as lost forest. A hexagon with less than a quarter of its area left as land is not ranked.</p>
+			<p>Change is 2026 against 2019. The 40 biggest losses were ranked, and each was also re-ranked starting from 2020, because 2019 read unusually green on the eastern edge of the city.</p>
+		</section>
+
+		<section id="checking">
+			<h2>Checking by eye</h2>
+			<p>Each of the 40 biggest losses was compared against eight dry seasons of photos and given a verdict. A place is on the map only if the loss is plainly visible: farmland scraped, a road grid laid, buildings spreading. Of the 40, 30 passed. The rest were lake restoration work (the lake's own caretakers digging out silt or rebuilding its embankment), or could not be settled from the photos.</p>
+			<p>Neighbouring hexagons that passed are shown as one place, so the map has fewer, bigger dots.</p>
+		</section>
+
+		<section id="lakes">
+			<h2>Lake buffers</h2>
+			<p>Bengaluru's 2015 master plan (the Revised Master Plan 2015) protects a 30 m buffer around every lake. For the 590 mapped lakes of a hectare or more, that ring was measured in three 10 m bands. The band touching the water is dropped, because a shoreline moves with the seasons. The outer 20 m is what was measured, and the 40 biggest losses there were checked by eye in the same way.</p>
+			<div class="figure">
+				<svg viewBox="0 0 640 170" role="img" aria-label="Cross-section of a lake edge: water, then three 10 metre bands, the first dropped">
+					<rect x="0" y="40" width="200" height="90" fill="#2b76b0" opacity=".55"/>
+					<text x="16" y="92">Mapped water</text>
+					<rect x="200" y="40" width="130" height="90" fill="#8a8f8b" opacity=".35"/>
+					<rect x="330" y="40" width="130" height="90" fill="#b4501d" opacity=".45"/>
+					<rect x="460" y="40" width="130" height="90" fill="#b4501d" opacity=".45"/>
+					<line x1="200" x2="200" y1="30" y2="140" stroke="currentColor" stroke-width="1.5"/>
+					<text x="210" y="92">0–10 m</text><text x="340" y="92">10–20 m</text><text x="470" y="92">20–30 m</text>
+					<text class="m" x="210" y="156">dropped: shoreline</text>
+					<text class="m" x="340" y="156">measured</text><text class="m" x="470" y="156">measured</text>
+					<text class="m" x="200" y="22">edge of mapped water</text>
+					<line x1="590" x2="590" y1="30" y2="140" stroke="currentColor" stroke-dasharray="3 3"/>
+					<text class="m" x="500" y="22">30 m, 2015 plan</text>
+				</svg>
+				<p class="cap">The ring starts at the edge of mapped water, not the legal lake boundary, so the claim is "within 30 m of mapped water". Of the 40 biggest ring losses, 8 were roads, buildings or clearing; 18 were lake restoration work, which is not counted as loss.</p>
+			</div>
+		</section>
+
+		<section id="limits">
+			<h2>What this cannot see</h2>
+			<ul>
+				<li><b>The built-up core.</b> A street with little green has little to lose, so this is a map of where green land lost its green, not where the city lost its last trees.</li>
+				<li><b>Trees versus crops.</b> Greenness cannot tell a tree from a crop. Farmland changes with the season, which is why the map works in hexagons and why every place was checked by eye.</li>
+				<li><b>Gains.</b> The biggest gains were plantations, or lakes refilling past their mapped edge, so gains are not shown.</li>
+				<li><b>Lakes that are not mapped.</b> About 175 tanks in the official lists have no mapped water, likely the dry and built-over ones. They are not in the lake study.</li>
+				<li><b>Current law.</b> Karnataka cut drain buffers in 2025, and the status of the lake-buffer amendment is disputed. This site reports land that was protected when the period began.</li>
+			</ul>
+		</section>
+
+		<section id="places">
+			<h2>Every place, in detail</h2>
+			<p>"Biggest losses" ranks the place among the 40 largest we checked, separately for hexagons and for lake rings. "Also from 2020" says whether it still makes that list when the comparison starts a year later.</p>
+			<div class="tbl"><table><thead><tr><th>Place</th><th>What the photos show</th><th>Kind</th><th>Biggest losses</th><th>Also from 2020</th></tr></thead><tbody id="rows"></tbody></table></div>
+		</section>
+
+		<section id="sources">
+			<h2>Sources</h2>
+			<ul>
+				<li>Copernicus Sentinel-2 surface reflectance, through Google Earth Engine.</li>
+				<li>Lakes, wetlands and place names: OpenStreetMap contributors (ODbL). Map labels: OpenFreeMap.</li>
+				<li>Lake lists used to test the lake map: KSRSAC Tank Information System, ATREE (CC-BY), EMPRI 2018.</li>
+				<li>Buffer widths: BDA Revised Master Plan 2015, zoning regulations.</li>
+			</ul>
+		</section>
+	</article>
+</main>
+
+<footer class="wrap site-foot">
+	<span>Imagery: contains modified Copernicus Sentinel-2 data.</span>
+	<a href="index.html">← Back to the map</a>
+</footer>
+
+<script>
+fetch("data/details.json").then((r) => r.json()).then((rows) => {
+	const body = document.getElementById("rows");
+	const clean = (note) => note.replace(/\s*\((?:readable|hex [A-Z] of the deep dive)\)/g, "").replace(/;?\s*rank depends on 2019:.*$/, "").replace(/^[^:]{0,60}:\s*/, "");
+	for (const r of rows) {
+		const tr = document.createElement("tr");
+		const from2020 = r.rank_from_2020 != null && r.rank_from_2020 <= 40 ? "yes" : "no";
+		tr.innerHTML = `<td><a href="index.html#${r.place}">${r.name}</a></td><td>${clean(r.note)}</td><td><span class="chip ${r.kind}">${r.kind === "lake" ? "lake edge" : "green ground"}</span></td><td class="n">${r.rank} of 40</td><td>${from2020}</td>`;
+		body.appendChild(tr);
+	}
+});
+</script>
+</body>
+</html>
