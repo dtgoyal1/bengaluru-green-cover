@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>How it was made · Bengaluru green ground</title>
-<meta name="description" content="How the Bengaluru green ground map was made: what was measured, how every place was checked, and what it cannot see.">
+<title>How it was made · Bengaluru green cover</title>
+<meta name="description" content="How the Bengaluru green cover map was made: what was measured, how every place was checked, and what it cannot see.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2212%22 fill=%22%23ef7a3c%22 stroke=%22white%22 stroke-width=%223%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -12,7 +12,7 @@
 </head>
 <body>
 <header class="wrap site-bar">
-	<a class="site-name" href="index.html">Bengaluru <span>green ground</span></a>
+	<a class="site-name" href="index.html">Bengaluru <span>green cover</span></a>
 	<nav class="nav" aria-label="Site">
 		<a href="index.html">Map</a>
 		<a href="method.html" aria-current="page">How it was made</a>
@@ -91,7 +91,7 @@
 				<li><b>Trees versus crops.</b> Greenness cannot tell a tree from a crop. Farmland changes with the season, which is why the map works in hexagons and why every place was checked by eye.</li>
 				<li><b>Gains.</b> The biggest gains were plantations, or lakes refilling past their mapped edge, so gains are not shown.</li>
 				<li><b>Lakes that are not mapped.</b> About 175 tanks in the official lists have no mapped water, likely the dry and built-over ones. They are not in the lake study.</li>
-				<li><b>Current law.</b> Karnataka cut drain buffers in 2025, and the status of the lake-buffer amendment is disputed. This site reports land that was protected when the period began.</li>
+				<li><b>Current law.</b> Karnataka cut drain buffers in 2025, and in February 2026 notified a law that shrinks lake buffers by lake size: the full 30 m now applies only to lakes over 100 acres. This site reports land that was protected when the period began.</li>
 			</ul>
 		</section>
 
@@ -107,7 +107,9 @@
 				<li>Copernicus Sentinel-2 surface reflectance, through Google Earth Engine.</li>
 				<li>Lakes, wetlands and place names: OpenStreetMap contributors (ODbL). Map labels: OpenFreeMap.</li>
 				<li>Lake lists used to test the lake map: KSRSAC Tank Information System, ATREE (CC-BY), EMPRI 2018.</li>
-				<li>Buffer widths: BDA Revised Master Plan 2015, zoning regulations.</li>
+				<li>Buffer widths: BDA Revised Master Plan 2015, zoning regulations. The 2026 change: <a href="https://www.deccanherald.com/india/karnataka/state-notifies-act-to-shrink-lake-buffer-zones-based-on-area-3903719">Deccan Herald, 19 February 2026</a>.</li>
+				<li>Shivaram Karanth Layout, its size and when groundwork began: <a href="https://www.deccanherald.com/city/top-bengaluru-stories/shivaram-karanth-layout-farmers-protest-bulldozing-of-crops-arrested-1195397.html">Deccan Herald, 27 February 2023</a>.</li>
+				<li>The September 2022 floods in Varthur: <a href="https://www.thenewsminute.com/karnataka/videos-bengaluru-lakes-overflow-again-after-heavy-rains-streets-flooded-167538">The News Minute, 5 September 2022</a>; <a href="https://www.deccanherald.com/city/encroached-canal-turns-bellandur-s-bane-1142551.html">Deccan Herald, 6 September 2022</a>.</li>
 			</ul>
 		</section>
 	</article>
@@ -125,7 +127,7 @@ fetch("data/details.json").then((r) => r.json()).then((rows) => {
 	for (const r of rows) {
 		const tr = document.createElement("tr");
 		const from2020 = r.rank_from_2020 != null && r.rank_from_2020 <= 40 ? "yes" : "no";
-		tr.innerHTML = `<td><a href="index.html#${r.place}">${r.name}</a></td><td>${clean(r.note)}</td><td><span class="chip ${r.kind}">${r.kind === "lake" ? "lake edge" : "green ground"}</span></td><td class="n">${r.rank} of 40</td><td>${from2020}</td>`;
+		tr.innerHTML = `<td><a href="index.html#${r.place}">${r.name}</a></td><td>${clean(r.note)}</td><td><span class="chip ${r.kind}">${r.kind === "lake" ? "lake edge" : "green cover"}</span></td><td class="n">${r.rank} of 40</td><td>${from2020}</td>`;
 		body.appendChild(tr);
 	}
 });

@@ -19,14 +19,13 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 **M4 closed 2026-09-28** (provisionally, by Claude). **M3 dropped 2026-09-28.** **M2 closed 2026-09-27.**
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** M6 for real: a static page in `site/` reading `site/data/` (MapLibre + the
-PMTiles protocol), opening at city scale so the two fronts show — the north-west (Shivaram Karanth
-Layout and its three lakes) and the east (Varthur to Hoskote). Scope confirmed by Aditya
-2026-09-28/29: loss of green cover, and loss inside protected zones; lake works do not count; **no
-gains anywhere on the site**.
-**First-visitor review of the M6 build (2026-09-29):** `REVIEW-first-visitor-2026-09-29.md`.
-Nothing acted on yet, and four open decisions for Aditya are at the bottom of it. Start the next
-session there.
+**Next action:** host it. Pick Cloudflare Pages or GitHub Pages and upload `site/` directly (the
+two `.pmtiles` are gitignored), then add `og:image` + `og:url` with absolute URLs — the other
+link-preview tags are in. Before that, Aditya to read the two front paragraphs and the new headline
+(2026-10-03), which are Claude's wording. Still open from the review: the left-pane drag-sync check
+(by hand), and M7/M8.
+**First-visitor review (2026-09-29):** `REVIEW-first-visitor-2026-09-29.md` — findings 1-6 and the
+design bugs were acted on 2026-10-03 (see decision log).
 
 **M5's result, `site/data/`:** `2019.pmtiles` and `2026.pmtiles` (13 Feb 2019 and 6 Feb 2026, one
 pass each, z8-14, WebP, 13.8 and 15.0 MB, gitignored — `export_tiles.py`), `hexes.geojson` (loss
@@ -96,7 +95,7 @@ to IISc. Do not reintroduce it.
 
 Run `notebooks/m1_spot_check.ipynb` for the whole method end to end, and
 `results/imagery/index.html` for the fastest eyeball check on any single number.
-**Last worked on:** 2026-09-28
+**Last worked on:** 2026-10-03
 
 **`EE_PROJECT=project-id-0186438029819335325`** (display name "TAP", `roles/owner`,
 `earthengine.googleapis.com` enabled). Not a credential, but it does travel with this file if the
@@ -1029,6 +1028,31 @@ Append one line per session. Date, what changed, why.
   load": the hexes show clear spots of lost green cover, with the size of the loss, at city scale,
   which also answers the review's point that the first swipe at city scale shows no change. The
   button still hides them.
+- 2026-10-03 — **Review fixes, headline and the two front paragraphs.** Two paragraphs, one per
+  front, were Aditya's call; the wording is Claude's, provisional. They sit in the "Places that lost
+  their green" groups (north-west first), above each front's photos — the front page is no longer
+  visuals only. Counts in the copy are computed from `site/data/`, not typed. Headline (Claude's
+  call, provisional — reverse in `app.js` `$("stat")`): "We checked the 40 biggest losses… 30
+  were plainly real, in 14 places… 11 of them in one new layout… These are only the biggest",
+  which fixes the 30-vs-14 mismatch and says it is a minimum. **No area figure and no %:** hex
+  area is not cleared area, and raw NDVI % contradicts the city-relative method; a real "km²
+  cleared" figure would need a per-pixel threshold inside the checked places — new analysis, not
+  done. **Sourced facts** (a research agent, every claim checked against the article text):
+  SK Layout is a BDA layout of about 3,500 acres (DH says 3,546, TNM 3,456), groundwork began 24 Feb
+  2023 (DH 27-02-2023) — matches the 2023→2024 drop in the hexes; Varthur flooded in Sep 2022 and
+  officials blamed encroached drains and lost wetlands (TNM 05-09-2022, DH 06-09-2022), placed as a
+  separate sentence with no causal claim; RMP 2015 is BDA's plan, so "the buffer that the same
+  authority's master plan protects" is factual. **Correction on the method page:** the lake-buffer
+  amendment is not disputed — Karnataka notified it 18 Feb 2026 (buffers scale with lake size; 30 m
+  only over 100 acres; DH 19-02-2026). Not used: Byalakere (BDA promised a 30 m buffer, DH
+  02-06-2026, one source, and our Bylakere change is 2020-23, before SK groundwork), Hoskote
+  warehousing (no Kolathuru reporting), park-area comparisons (Cubbon Park figures conflict).
+  **Fixes:** "green ground" → "green cover" everywhere; ground dots white with a dark ring so orange
+  only means the hex ramp; map key now separates "checked by eye" dots from "measured from space,
+  not all checked" hexes (replaces the mini legend); attribution is a plain credit strip on the
+  stage, no longer clipped by the swipe; front labels don't wrap, and drop their subline under
+  700 px so they don't collide; og:title/description and twitter:card added (og:image waits for a
+  host). Checked headless at 1440 and 390 px, no console errors, no horizontal scroll.
 
 ## Parked: the property/quality matrix
 

@@ -3,8 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Bengaluru green ground</title>
-<meta name="description" content="Where Bengaluru's green ground went between 2019 and 2026: a satellite swipe of the city's edge, and every place we checked by eye.">
+<title>Bengaluru green cover</title>
+<meta name="description" content="Where Bengaluru's green cover went between 2019 and 2026: a satellite swipe of the city's edge, and every place we checked by eye.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Where Bengaluru's green cover went, 2019 to 2026">
+<meta property="og:description" content="A satellite swipe of the city's edge, and the biggest losses of green cover, each checked by eye.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2212%22 fill=%22%23ef7a3c%22 stroke=%22white%22 stroke-width=%223%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -13,7 +17,7 @@
 </head>
 <body>
 <header class="wrap site-bar">
-	<a class="site-name" href="index.html">Bengaluru <span>green ground</span></a>
+	<a class="site-name" href="index.html">Bengaluru <span>green cover</span></a>
 	<nav class="nav" aria-label="Site">
 		<a href="index.html" aria-current="page">Map</a>
 		<a href="method.html">How it was made</a>
@@ -26,9 +30,9 @@
 
 <main>
 	<section class="wrap hero">
-		<h1>Where Bengaluru's green ground went</h1>
-		<p class="stat" id="stat">Since 2019, stretches of farmland and scrub on the city's edge were scraped bare, and lakes had roads and buildings pushed up to their water.</p>
-		<p class="how">Drag the handle to compare February 2019 with February 2026. Tap a dot to see what happened there.</p>
+		<h1>Where Bengaluru's green cover went</h1>
+		<p class="stat" id="stat">Since 2019, farmland, scrub and wetland on the city's edge were scraped bare, and lakes had roads and buildings pushed up to their water.</p>
+		<p class="how">Drag the handle to compare February 2019 with February 2026. Coloured hexagons show where the satellite measured green lost; the dots are the places we checked by eye. Tap a dot to see what happened there.</p>
 		<div class="fronts" id="fronts"></div>
 	</section>
 
@@ -43,13 +47,14 @@
 			<button class="reset" id="reset" type="button" hidden>Whole city</button>
 			<div class="float">
 				<button type="button" class="pill" id="hexbtn" aria-pressed="true">Hide where green was lost</button>
-				<div class="minilegend" id="minilegend"><span>Green lost: a little</span><i></i><span>a lot</span></div>
 			</div>
 			<div class="mapkey" aria-hidden="true">
-				<span><i class="dotkey" style="background:var(--loss)"></i>Green ground lost</span>
-				<span><i class="dotkey" style="background:var(--ring)"></i>Built within 30 m of a lake</span>
+				<span><i class="dotkey ground"></i>Checked by eye: green cover lost</span>
+				<span><i class="dotkey lake"></i>Checked by eye: built within 30 m of a lake</span>
+				<span id="hexkey"><i class="rampkey"></i>Measured from space, not all checked</span>
 			</div>
 			<div class="card" id="card" aria-live="polite" hidden></div>
+			<div class="credit">Contains modified Copernicus Sentinel-2 data 2019, 2026 · <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div>
 		</div>
 	</div>
 

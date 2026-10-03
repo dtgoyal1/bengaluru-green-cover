@@ -2,13 +2,16 @@
 
 const DATA = "data/";
 const YEARS = [2019, 2026];
-const DOT = { ground: "#ef7a3c", lake: "#56a8ef" };
+const DOT = { ground: "#ffffff", lake: "#56a8ef" };
+const CHECKED = 40;
 const LOSS_MIN = 0.05;
 const LOSS_RAMP = ["interpolate", ["linear"], ["get", "loss"], LOSS_MIN, "#ffe08a", 0.08, "#f59e0b", 0.12, "#dc2626", 0.2, "#7f1d1d"];
 const FRONTS = {
-	east: { title: "The east front", sub: "Varthur to Hoskote", text: "Many separate pieces of growth, spreading along the city's eastern edge." },
-	"north-west": { title: "The north-west front", sub: "Shivaram Karanth Layout", text: "One new layout, scraping farmland and pushing its road grid up to three lakes." },
-	elsewhere: { title: "Elsewhere", sub: "", text: "Single sites to the south and west." },
+	"north-west": { title: "The north-west front", sub: "Shivaram Karanth Layout", story: true,
+		text: (s) => `Shivaram Karanth Layout, on the city's north-west edge, is the biggest single place on this map: ${s.hexes} of the ${s.total} confirmed losses sit inside it, side by side. It is a Bangalore Development Authority layout of about 3,500 acres, and groundwork began in February 2023. By the next dry season, early 2024, the farmland and scrub had been scraped and a road grid laid across them. The grid runs up to the shores of Guni Agrahara and Medi Agrahara lakes, within 30 m of their water: the buffer that the same authority's master plan protects. A third lake nearby, Bylakere, was ringed by layout roads and plots between 2020 and 2023.` },
+	east: { title: "The east front", sub: "Varthur to Hoskote", story: true,
+		text: (s) => `The east is the opposite: no single project, but many. ${s.hexes} of the ${s.total} confirmed losses are spread over ${s.places} places from Varthur to Hoskote, and they came year after year, mostly from 2022 on. The single biggest loss on the map is here, at K Dommasandra and Kumbena Agrahara, where fields and a green wetland valley were scraped and built on from 2023. Around Varthur Lake, land beside the water and the green valley west of its wetland were cleared for building. Varthur flooded in September 2022, with boats on its streets, and officials blamed encroached storm-water drains and lost wetlands. Further out, the new Satellite Town Ring Road cut through farmland at Kolathuru in 2022, and a large warehouse followed in 2024. Two lakes, Thubarahalli and Dooravaninagar, had towers, a widened road and rail works built within 30 m of their water.` },
+	elsewhere: { title: "Elsewhere", sub: "", text: () => "Single sites to the south and west." },
 };
 const FRONT_LABEL_MAX_ZOOM = 11.3;
 const PLACE_MAX_ZOOM = { ground: 14.2, lake: 15 };
@@ -71,7 +74,7 @@ function addOverlays(map, data) {
 		paint: {
 			"circle-color": ["match", ["get", "kind"], "lake", DOT.lake, DOT.ground],
 			"circle-radius": ["interpolate", ["linear"], ["zoom"], 9, 5.5, 14, 9],
-			"circle-stroke-color": ["case", ["boolean", ["feature-state", "selected"], false], "#ffd35a", "#ffffff"],
+			"circle-stroke-color": ["case", ["boolean", ["feature-state", "selected"], false], "#ffd35a", ["match", ["get", "kind"], "lake", "#ffffff", "#1c221f"]],
 			"circle-stroke-width": ["case", ["boolean", ["feature-state", "selected"], false], 3.5, 1.8],
 		} });
 }
@@ -93,7 +96,15 @@ async function main() {
 	const cityBounds = extent([study]);
 	const grounds = details.filter((d) => d.kind === "ground").length;
 	const lakesHit = details.filter((d) => d.kind === "lake").length;
-	$("stat").textContent = `Since 2019, ${grounds} stretches of farmland and scrub on the city's edge were scraped bare, and ${lakesHit} lakes had roads or buildings pushed within 30 m of their water. Most of it happened on two fronts.`;
+	const frontOf = (h) => byId[h.properties.place].properties.front;
+	const placed = hexes.features.filter((h) => h.properties.place);
+	const stats = Object.fromEntries(Object.keys(FRONTS).map((k) => [k, {
+		total: grounds,
+		hexes: placed.filter((h) => frontOf(h) === k).length,
+		places: places.features.filter((f) => f.properties.front === k && f.properties.kind === "ground").length,
+	}]));
+	const groundPlaces = places.features.filter((f) => f.properties.kind === "ground").length;
+	$("stat").textContent = `We checked the ${CHECKED} biggest losses of green cover on Bengaluru's edge since 2019 by eye. ${grounds} were plainly real, in ${groundPlaces} places: farmland, scrub and wetland scraped for roads and buildings, ${stats["north-west"].hexes} of them in one new layout. ${lakesHit} lakes had roads or buildings pushed within 30 m of their water. These are only the biggest; the coloured hexagons show where the satellite saw more.`;
 
 	const opts = {
 		bounds: cityBounds, fitBoundsOptions: { padding: 24 }, minZoom: 8.5, maxZoom: 16,
@@ -105,8 +116,6 @@ async function main() {
 	const maps = [before, after];
 	maps.forEach((m) => m.touchZoomRotate.disableRotation());
 	after.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
-	after.addControl(new maplibregl.AttributionControl({ compact: true,
-		customAttribution: 'Contains modified Copernicus Sentinel-2 data 2019, 2026 · <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }), "bottom-right");
 
 	let syncing = false;
 	for (const [a, b] of [[before, after], [after, before]]) {
@@ -190,7 +199,7 @@ async function main() {
 		highlight(id);
 		card.hidden = false;
 		card.innerHTML = `<button class="x" type="button" aria-label="Close">×</button>
-			<span class="eyebrow">${p.kind === "lake" ? "Built within 30 m of a lake" : "Green ground lost"}</span>
+			<span class="eyebrow">${p.kind === "lake" ? "Built within 30 m of a lake" : "Green cover lost"}</span>
 			<div class="name">${p.name}</div>
 			<div class="pair">
 				<figure><img src="${DATA}crops/${id}_2019.jpg" alt="${p.name}, 13 February 2019"><figcaption>13 Feb 2019</figcaption></figure>
@@ -250,7 +259,7 @@ async function main() {
 		state.hexes = !state.hexes;
 		$("hexbtn").setAttribute("aria-pressed", state.hexes);
 		$("hexbtn").textContent = state.hexes ? "Hide where green was lost" : "Show where green was lost";
-		$("minilegend").hidden = !state.hexes;
+		$("hexkey").hidden = !state.hexes;
 		for (const m of maps) for (const l of ["hex-fill", "hex-line"]) m.setLayoutProperty(l, "visibility", state.hexes ? "visible" : "none");
 	});
 	$("reset").addEventListener("click", () => {
@@ -281,14 +290,14 @@ async function main() {
 		if (!members.length) continue;
 		const g = document.createElement("div");
 		g.className = "group";
-		g.innerHTML = `<h3>${f.title}${f.sub ? ` · ${f.sub}` : ""}</h3><p>${f.text}</p><div class="strip"></div>`;
+		g.innerHTML = `<h3>${f.title}${f.sub ? ` · ${f.sub}` : ""}</h3><p${f.story ? ' class="story"' : ""}>${f.text(stats[k])}</p><div class="strip"></div>`;
 		for (const m of members) {
 			const p = m.properties;
 			const t = document.createElement("button");
 			t.type = "button";
 			t.className = "tile";
 			t.innerHTML = `<div class="pair"><img src="${DATA}crops/${p.id}_2019.jpg" alt="" loading="lazy"><img src="${DATA}crops/${p.id}_2026.jpg" alt="" loading="lazy"></div>
-				<h4><i class="dotkey" style="background:${DOT[p.kind]}"></i>${p.name}</h4><p>${p.text}</p>`;
+				<h4><i class="dotkey ${p.kind}"></i>${p.name}</h4><p>${p.text}</p>`;
 			t.addEventListener("click", () => { stage.scrollIntoView({ behavior: "smooth", block: "center" }); select(p.id); });
 			g.querySelector(".strip").appendChild(t);
 		}
