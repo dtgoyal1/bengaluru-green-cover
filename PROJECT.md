@@ -24,6 +24,9 @@ PMTiles protocol), opening at city scale so the two fronts show — the north-we
 Layout and its three lakes) and the east (Varthur to Hoskote). Scope confirmed by Aditya
 2026-09-28/29: loss of green cover, and loss inside protected zones; lake works do not count; **no
 gains anywhere on the site**.
+**First-visitor review of the M6 build (2026-09-29):** `REVIEW-first-visitor-2026-09-29.md`.
+Nothing acted on yet, and four open decisions for Aditya are at the bottom of it. Start the next
+session there.
 
 **M5's result, `site/data/`:** `2019.pmtiles` and `2026.pmtiles` (13 Feb 2019 and 6 Feb 2026, one
 pass each, z8-14, WebP, 13.8 and 15.0 MB, gitignored — `export_tiles.py`), `hexes.geojson` (loss
@@ -1006,6 +1009,22 @@ Append one line per session. Date, what changed, why.
     fails if a place has no copy row or a copy row matches no place.
   - **Card photos need `filterBounds`:** a date-prefix filter alone makes Earth Engine mosaic every
     scene on Earth from that day and time out.
+- 2026-09-29 — **M6 first build (`site/`), Claude's calls, provisional.** Two synced MapLibre maps
+  (2019 below, 2026 on top clipped at the divider), so dots and hexes are drawn and clickable on
+  both halves. Opens on the whole city with the two fronts labelled and a chip to fly to each.
+  **Place labels from OpenFreeMap** (free, no key, OpenMapTiles schema): satellite imagery alone
+  gives a public viewer no way to find where they are; a third-party dependency, noted in the
+  method page's sources. **The surround outside the study area is dimmed** instead of showing
+  black margins or unexplained photo. **Selecting a place flies to it and moves the divider onto
+  it**, so both years are visible at once. **The loss hexes show only losses of 0.05 or more**
+  (239 hexes): against the city average about half of all hexes lose *something* (1,464), which
+  coloured half the city and buried the story; 0.05 is about twice a hex's year-to-year scatter
+  (0.016-0.031, 09-21). **Deep links** `index.html#<place-id>` open a place directly. Local
+  preview: `python site/serve.py` (range requests, no caching).
+- 2026-09-29 — **First-visitor review of the M6 build**, in `REVIEW-first-visitor-2026-09-29.md`.
+  Nothing changed yet. The main points are that the hero's "30 stretches" doesn't match the 14
+  orange dots, the city-scale opening shows no visible change, there's no og:image or byline, and
+  Shivaram Karanth is buried as the lede.
 
 ## Parked: the property/quality matrix
 
