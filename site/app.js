@@ -8,9 +8,9 @@ const LOSS_MIN = 0.05;
 const LOSS_RAMP = ["interpolate", ["linear"], ["get", "loss"], LOSS_MIN, "#ffe08a", 0.08, "#f59e0b", 0.12, "#dc2626", 0.2, "#7f1d1d"];
 const FRONTS = {
 	"north-west": { title: "The north-west front", sub: "Shivaram Karanth Layout", story: true,
-		text: (s) => `Shivaram Karanth Layout, on the city's north-west edge, is the biggest single place on this map: ${s.hexes} of the ${s.total} confirmed losses sit inside it, side by side. It is a Bangalore Development Authority layout of about 3,500 acres, and groundwork began in February 2023. By the next dry season, early 2024, the farmland and scrub had been scraped and a road grid laid across them. The grid runs up to the shores of Guni Agrahara and Medi Agrahara lakes, within 30 m of their water: the buffer that the same authority's master plan protects. A third lake nearby, Bylakere, was ringed by layout roads and plots between 2020 and 2023.` },
+		text: (s) => `Shivaram Karanth Layout, on the city's north-west edge, is the biggest single place on this map: ${s.hexes} of the ${s.total} confirmed losses sit inside it, side by side. It is a Bangalore Development Authority layout of about 3,500 acres, and groundwork began in February 2023. By the next dry season, early 2024, the farmland and scrub had been scraped and a road grid laid across them. The grid runs up to the shores of Guni Agrahara and Medi Agrahara lakes, within 30 m of their water: the buffer that the same authority's 2015 master plan protected. A third lake nearby, Bylakere, was ringed by layout roads and plots between 2020 and 2023.` },
 	east: { title: "The east front", sub: "Varthur to Hoskote", story: true,
-		text: (s) => `The east is the opposite: no single project, but many. ${s.hexes} of the ${s.total} confirmed losses are spread over ${s.places} places from Varthur to Hoskote, and they came year after year, mostly from 2022 on. The single biggest loss on the map is here, at K Dommasandra and Kumbena Agrahara, where fields and a green wetland valley were scraped and built on from 2023. Around Varthur Lake, land beside the water and the green valley west of its wetland were cleared for building. Varthur flooded in September 2022, with boats on its streets, and officials blamed encroached storm-water drains and lost wetlands. Further out, the new Satellite Town Ring Road cut through farmland at Kolathuru in 2022, and a large warehouse followed in 2024. Two lakes, Thubarahalli and Dooravaninagar, had towers, a widened road and rail works built within 30 m of their water.` },
+		text: (s) => `The east is the opposite: no single project, but many. ${s.hexes} of the ${s.total} confirmed losses are spread over ${s.places} places from Varthur to Hoskote, and they came year after year, mostly from 2022 on. One of the biggest losses on the map is here, at K Dommasandra and Kumbena Agrahara, where fields and a green wetland valley were scraped and built on from 2023. Around Varthur Lake, land beside the water and the green valley west of its wetland were cleared for building from 2023. That came a year after Varthur flooded in September 2022, with boats on its streets, when a city official blamed the flooding on encroached storm-water drains and lost wetlands. Further out, the new Satellite Town Ring Road cut through farmland at Kolathuru in 2022, and a large warehouse followed in 2024. Two lakes, Thubarahalli and Dooravaninagar, had towers, a widened road and rail works built within 30 m of their water.` },
 	elsewhere: { title: "Elsewhere", sub: "", text: () => "Single sites to the south and west." },
 };
 const FRONT_LABEL_MAX_ZOOM = 11.3;
@@ -104,7 +104,7 @@ async function main() {
 		places: places.features.filter((f) => f.properties.front === k && f.properties.kind === "ground").length,
 	}]));
 	const groundPlaces = places.features.filter((f) => f.properties.kind === "ground").length;
-	$("stat").textContent = `We checked the ${CHECKED} biggest losses of green cover on Bengaluru's edge since 2019 by eye. ${grounds} were plainly real, in ${groundPlaces} places: farmland, scrub and wetland scraped for roads and buildings, ${stats["north-west"].hexes} of them in one new layout. ${lakesHit} lakes had roads or buildings pushed within 30 m of their water. These are only the biggest; the coloured hexagons show where the satellite saw more.`;
+	$("stat").textContent = `We checked the ${CHECKED} biggest losses of green cover on Bengaluru's edge since 2019 by eye. ${grounds} were plainly real, in ${groundPlaces} places: farmland, scrub and wetland scraped for roads and buildings, ${stats["north-west"].hexes} of them in one new layout. A separate check of lake edges found ${lakesHit} lakes with roads or buildings pushed within 30 m of their water. These are only the biggest; the coloured hexagons show where the satellite saw more.`;
 
 	const opts = {
 		bounds: cityBounds, fitBoundsOptions: { padding: 24 }, minZoom: 8.5, maxZoom: 16,
@@ -233,7 +233,7 @@ async function main() {
 		card.innerHTML = `<button class="x" type="button" aria-label="Close">×</button>
 			<span class="eyebrow">An area of about 0.76 km²</span>
 			<div class="name">${say}</div>
-			<p class="fact">Measured from the satellite, but not checked against the photos, so there is no story here yet.</p>`;
+			<p class="fact">${props.doubtful ? "Checked against the photos, but they don't settle what happened, so it is not counted as a confirmed loss." : "Measured from the satellite, but not checked against the photos, so there is no story here yet."}</p>`;
 		card.querySelector(".x").addEventListener("click", () => closeCard(true));
 	}
 

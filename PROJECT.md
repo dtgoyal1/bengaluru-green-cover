@@ -1039,10 +1039,14 @@ Append one line per session. Date, what changed, why.
   cleared" figure would need a per-pixel threshold inside the checked places — new analysis, not
   done. **Sourced facts** (a research agent, every claim checked against the article text):
   SK Layout is a BDA layout of about 3,500 acres (DH says 3,546, TNM 3,456), groundwork began 24 Feb
-  2023 (DH 27-02-2023) — matches the 2023→2024 drop in the hexes; Varthur flooded in Sep 2022 and
-  officials blamed encroached drains and lost wetlands (TNM 05-09-2022, DH 06-09-2022), placed as a
-  separate sentence with no causal claim; RMP 2015 is BDA's plan, so "the buffer that the same
-  authority's master plan protects" is factual. **Correction on the method page:** the lake-buffer
+  2023 (DH 27-02-2023) — matches the 2023→2024 drop in the hexes; Varthur flooded in Sep 2022 and a
+  city official (DH cites one BBMP official) blamed encroached drains and lost wetlands (TNM
+  05-09-2022, DH 06-09-2022) — worded with the dates explicit ("clearing from 2023, a year after
+  Varthur flooded") so it can't read as the clearing causing the flood; RMP 2015 is BDA's plan, so
+  "the buffer that the same authority's 2015 master plan protected" is factual (past tense: the
+  2026 law shrank it). K Dommasandra is "one of the biggest losses", not "the biggest": it is rank
+  1 from 2019 but rank 4 from 2020. The headline calls the lake check "separate" so 30 + 8 doesn't
+  read as 38 of 40. **Correction on the method page:** the lake-buffer
   amendment is not disputed — Karnataka notified it 18 Feb 2026 (buffers scale with lake size; 30 m
   only over 100 acres; DH 19-02-2026). Not used: Byalakere (BDA promised a 30 m buffer, DH
   02-06-2026, one source, and our Bylakere change is 2020-23, before SK groundwork), Hoskote
@@ -1053,6 +1057,11 @@ Append one line per session. Date, what changed, why.
   stage, no longer clipped by the swipe; front labels don't wrap, and drop their subline under
   700 px so they don't collide; og:title/description and twitter:card added (og:image waits for a
   host). Checked headless at 1440 and 390 px, no console errors, no horizontal scroll.
+  **Bug fixed in `export_vectors.py`:** the 10 rejected top-40 hexes were drawn as loss, with a card
+  saying "not checked against the photos". Now the 4 lake-works hexes export with `loss` null (lake
+  works are not loss — settled 2026-09-28), so 235 hexes show, not 239; the 6 doubtful ones keep
+  their colour but carry `doubtful: true`, and their card says the photos don't settle it. SK
+  Layout's card fact changed from "the biggest loss" to "the biggest single place".
 
 ## Parked: the property/quality matrix
 

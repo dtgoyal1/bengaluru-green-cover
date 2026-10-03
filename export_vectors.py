@@ -4,8 +4,10 @@ Only what the M6 spec (PROJECT.md, 2026-09-29) puts on the page, and only losses
 
   hexes.geojson     all 2,868 hexes; `loss` is how far greenness fell against the
                     city average 2019->2026 (positive = lost), null where it rose
-                    or the hex has under 25% land after the lake mask; `place` when
-                    the hex belongs to a checked place
+                    or the hex has under 25% land after the lake mask, and null
+                    where the photo check found lake works (not loss); `place`
+                    when the hex belongs to a checked place; `doubtful` when the
+                    photo check could not settle it
   places.geojson    one point per place: neighbouring checked hex losses merged
                     into one place, each checked lake-ring loss its own place,
                     with the plain copy from `site/places.csv` and the front it
@@ -106,8 +108,10 @@ def main() -> int:
 	norm = green - green.mean(axis=0)
 	change = (norm[YEARS[1]] - norm[YEARS[0]]).where(land >= LAND_CUTOFF)
 
-	hex_v = pd.read_csv(HEX_VERDICTS)
-	hex_v = hex_v[hex_v.verdict.isin(REAL_HEX)].set_index("h3")
+	all_hex_v = pd.read_csv(HEX_VERDICTS).set_index("h3")
+	hex_v = all_hex_v[all_hex_v.verdict.isin(REAL_HEX)]
+	lake_works = set(all_hex_v.index[all_hex_v.verdict == "lake works"])
+	doubtful = set(all_hex_v.index[all_hex_v.verdict == "doubtful"])
 	ring_v = pd.read_csv(RING_VERDICTS)
 	ring_v = ring_v[ring_v.verdict.isin(REAL_RING)].set_index("osm")
 
@@ -152,8 +156,8 @@ def main() -> int:
 		raise SystemExit(f"copy rows with no place: {sorted(unused)}")
 
 	grid = gpd.read_file(GRID)
-	hexes = [feature(g, h3=h, loss=None if pd.isna(change.get(h)) or change[h] >= 0 else round(-change[h], 3),
-		place=member.get(h)) for h, g in zip(grid.h3, grid.geometry)]
+	hexes = [feature(g, h3=h, loss=None if h in lake_works or pd.isna(change.get(h)) or change[h] >= 0 else round(-change[h], 3),
+		place=member.get(h), **({"doubtful": True} if h in doubtful else {})) for h, g in zip(grid.h3, grid.geometry)]
 
 	gba = shape(json.loads(NAMES.read_text())[GBA_KEY][0]["geojson"])
 	study = gpd.read_file(BOUNDARY).to_crs("EPSG:4326").union_all()
