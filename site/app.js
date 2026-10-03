@@ -19,7 +19,7 @@ maplibregl.addProtocol("pmtiles", protocol.tile);
 const $ = (id) => document.getElementById(id);
 const stage = $("stage");
 const card = $("card");
-const state = { selected: null, hexes: false, cut: 50 };
+const state = { selected: null, hexes: true, cut: 50 };
 
 function style(year) {
 	const place = (id, classes, minzoom, size) => ({
@@ -53,9 +53,9 @@ function addOverlays(map, data) {
 	for (const [name, json] of Object.entries(data)) map.addSource(name, { type: "geojson", data: json, promoteId: name === "places" ? "id" : undefined });
 	const below = "labels-major";
 	map.addLayer({ id: "hex-fill", type: "fill", source: "hexes", filter: [">=", ["coalesce", ["get", "loss"], 0], LOSS_MIN],
-		layout: { visibility: "none" }, paint: { "fill-color": LOSS_RAMP, "fill-opacity": 0.5 } }, below);
+		layout: { visibility: "visible" }, paint: { "fill-color": LOSS_RAMP, "fill-opacity": 0.5 } }, below);
 	map.addLayer({ id: "hex-line", type: "line", source: "hexes", filter: [">=", ["coalesce", ["get", "loss"], 0], LOSS_MIN],
-		layout: { visibility: "none" }, paint: { "line-color": "rgba(255,255,255,0.25)", "line-width": 0.5 } }, below);
+		layout: { visibility: "visible" }, paint: { "line-color": "rgba(255,255,255,0.25)", "line-width": 0.5 } }, below);
 	map.addLayer({ id: "outside", type: "fill", source: "mask", paint: { "fill-color": "#0b0d0c", "fill-opacity": 0.72 } }, below);
 	map.addLayer({ id: "boundary", type: "line", source: "boundary", filter: ["==", ["get", "role"], "study"],
 		paint: { "line-color": "rgba(255,255,255,0.55)", "line-width": 1.2, "line-dasharray": [3, 2] } }, below);

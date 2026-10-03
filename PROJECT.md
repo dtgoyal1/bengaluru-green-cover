@@ -36,7 +36,7 @@ only), `places.geojson` (22 places: 11 east, 5 north-west, 6 elsewhere; copy in 
 
 **M6 spec (agreed 2026-09-29 on the mockup, https://claude.ai/artifact/L7fTNUpp9zhjyeSSMB6Av7):**
 two pages. **Front page, visuals only:** headline, the full-width 2019 | 2026 photo swipe, one button
-that shows the loss-only hexes (off at load), dots for *places* (neighbouring checked hexes merge
+that hides the loss-only hexes (on at load since 2026-10-03), dots for *places* (neighbouring checked hexes merge
 into one place, each lake is one place), a card per place (name, one plain sentence, Sentinel-2
 before/after, a link to the method; no ranks, scores or verdict labels), a strip of places below
 the map, locality search, a one-line footer. **"How it was made" page:** what was measured, the
@@ -1025,6 +1025,10 @@ Append one line per session. Date, what changed, why.
   Nothing changed yet. The main points are that the hero's "30 stretches" doesn't match the 14
   orange dots, the city-scale opening shows no visible change, there's no og:image or byline, and
   Shivaram Karanth is buried as the lede.
+- 2026-10-03 — **Loss hexes are on at load** (Aditya's call). Reverses the M6 spec's "off at
+  load": the hexes show clear spots of lost green cover, with the size of the loss, at city scale,
+  which also answers the review's point that the first swipe at city scale shows no change. The
+  button still hides them.
 
 ## Parked: the property/quality matrix
 
