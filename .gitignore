@@ -33,3 +33,6 @@ results/m4_ring_photos/
 # site data: the GeoJSON and card photos are small and committed; the photo tiles
 # (~29 MB) regenerate with  python export_tiles.py  (cached tiles under out/)
 !site/data/*.geojson
+
+# the swipe photos as plain tiles (~29 MB, 1,584 files); regenerate with  python export_tiles.py
+site/data/tiles/

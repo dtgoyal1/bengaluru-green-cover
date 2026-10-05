@@ -16,15 +16,12 @@ const FRONTS = {
 const FRONT_LABEL_MAX_ZOOM = 11.3;
 const PLACE_MAX_ZOOM = { ground: 14.2, lake: 15 };
 
-const protocol = new pmtiles.Protocol();
-maplibregl.addProtocol("pmtiles", protocol.tile);
-
 const $ = (id) => document.getElementById(id);
 const stage = $("stage");
 const card = $("card");
 const state = { selected: null, hexes: true, cut: 50 };
 
-function style(year) {
+function style(year, bounds) {
 	const place = (id, classes, minzoom, size) => ({
 		id, type: "symbol", source: "labels", "source-layer": "place", minzoom,
 		filter: ["in", ["get", "class"], ["literal", classes]],
@@ -40,7 +37,8 @@ function style(year) {
 		version: 8,
 		glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
 		sources: {
-			photo: { type: "raster", url: "pmtiles://" + new URL(`${DATA}${year}.pmtiles`, location.href).href, tileSize: 256 },
+			photo: { type: "raster", tiles: [`${new URL(DATA, location.href).href}tiles/${year}/{z}/{x}/{y}.webp`],
+				tileSize: 256, minzoom: 8, maxzoom: 14, bounds: bounds.toArray().flat() },
 			labels: { type: "vector", url: "https://tiles.openfreemap.org/planet" },
 		},
 		layers: [
@@ -111,8 +109,8 @@ async function main() {
 		maxBounds: [[cityBounds.getWest() - 0.3, cityBounds.getSouth() - 0.3], [cityBounds.getEast() + 0.3, cityBounds.getNorth() + 0.3]],
 		attributionControl: false, dragRotate: false, pitchWithRotate: false, touchPitch: false, cooperativeGestures: false,
 	};
-	const before = new maplibregl.Map({ container: "map-before", style: style(YEARS[0]), ...opts });
-	const after = new maplibregl.Map({ container: "map-after", style: style(YEARS[1]), ...opts });
+	const before = new maplibregl.Map({ container: "map-before", style: style(YEARS[0], cityBounds), ...opts });
+	const after = new maplibregl.Map({ container: "map-after", style: style(YEARS[1], cityBounds), ...opts });
 	const maps = [before, after];
 	maps.forEach((m) => m.touchZoomRotate.disableRotation());
 	after.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");

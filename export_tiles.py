@@ -1,4 +1,4 @@
-"""Milestone 5: the two swipe photos as PMTiles, one file per year.
+"""Milestone 5: the two swipe photos as plain map tiles, one folder per year.
 
 Each year is ONE satellite pass, not the season median the numbers use: the
 median takes in hazy late-March days and made 2019 look about 20% softer than
@@ -13,12 +13,15 @@ east, south) no systematic brightness gap and similar sharpness:
 
 Tiles are fetched from Earth Engine's map tiles over the study boundary's box at
 zoom 8-14 (z14 is about 9.3 m a pixel here, the native 10 m; gotcha 6 caps it
-there), re-encoded as WebP and packed into `site/data/<year>.pmtiles`. Fetching
-is resumable: tiles already cached under `out/tiles/<year>/` are not refetched.
+there), re-encoded as WebP and copied to `site/data/tiles/<year>/{z}/{x}/{y}.webp`.
+Fetching is resumable: tiles already cached under `out/tiles/<year>/` are not
+refetched. Plain tile files, not PMTiles: Cloudflare Pages ignores HTTP Range
+requests, which PMTiles needs (logged 2026-10-05).
 """
 
 import math
 import os
+import shutil
 import socket
 import sys
 import time
@@ -30,8 +33,6 @@ from pathlib import Path
 import ee
 import geopandas as gpd
 from PIL import Image
-from pmtiles.tile import Compression, TileType, zxy_to_tileid
-from pmtiles.writer import Writer
 
 DAYS = {2019: "20190213", 2026: "20260206"}
 ZOOMS = range(8, 15)
@@ -43,7 +44,7 @@ NET_TIMEOUT_S = 120
 
 BOUNDARY = Path("data/study_boundary.geojson")
 CACHE = Path("out/tiles")
-OUT = Path("site/data")
+OUT = Path("site/data/tiles")
 
 
 def tile_range(bounds, z: int) -> tuple[range, range]:
@@ -86,28 +87,13 @@ def fetch(fetcher, z: int, x: int, y: int, path: Path) -> None:
 			time.sleep(5 * (attempt + 1))
 
 
-def pack(year: int, tiles: list[tuple[int, int, int]], bounds) -> Path:
-	w, s, e, n = bounds
-	OUT.mkdir(parents=True, exist_ok=True)
-	path = OUT / f"{year}.pmtiles"
-	with path.open("wb") as f:
-		writer = Writer(f)
-		for z, x, y in sorted(tiles, key=lambda t: zxy_to_tileid(*t)):
-			writer.write_tile(zxy_to_tileid(z, x, y), (CACHE / str(year) / f"{z}/{x}/{y}.webp").read_bytes())
-		writer.finalize(
-			{
-				"tile_type": TileType.WEBP,
-				"tile_compression": Compression.NONE,
-				"min_lon_e7": int(w * 1e7), "min_lat_e7": int(s * 1e7),
-				"max_lon_e7": int(e * 1e7), "max_lat_e7": int(n * 1e7),
-				"center_zoom": 11,
-				"center_lon_e7": int((w + e) / 2 * 1e7), "center_lat_e7": int((s + n) / 2 * 1e7),
-			},
-			{
-				"name": f"Bengaluru, Sentinel-2 true colour, {DAYS[year]}",
-				"attribution": f"Contains modified Copernicus Sentinel-2 data {year}",
-			},
-		)
+def publish(year: int, tiles: list[tuple[int, int, int]]) -> Path:
+	path = OUT / str(year)
+	shutil.rmtree(path, ignore_errors=True)
+	for z, x, y in tiles:
+		dest = path / f"{z}/{x}/{y}.webp"
+		dest.parent.mkdir(parents=True, exist_ok=True)
+		shutil.copyfile(CACHE / str(year) / f"{z}/{x}/{y}.webp", dest)
 	return path
 
 
@@ -127,9 +113,9 @@ def main() -> int:
 		started = time.time()
 		with ThreadPoolExecutor(WORKERS) as pool:
 			list(pool.map(lambda t: fetch(fetcher, *t, CACHE / str(year) / f"{t[0]}/{t[1]}/{t[2]}.webp"), tiles))
-		path = pack(year, tiles, bounds)
-		print(f"{year} ({day}): {len(tiles)} tiles in {time.time() - started:.0f}s -> {path} "
-			f"({path.stat().st_size / 1e6:.1f} MB)")
+		path = publish(year, tiles)
+		size = sum(f.stat().st_size for f in path.rglob("*.webp"))
+		print(f"{year} ({day}): {len(tiles)} tiles in {time.time() - started:.0f}s -> {path} ({size / 1e6:.1f} MB)")
 	return 0
 
 

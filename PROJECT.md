@@ -15,20 +15,24 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 
 ## Status
 
-**Current milestone:** 6 — the site, built for real from `site/data/`. **M5 closed 2026-09-29.**
+**Current milestone:** 8 — polish and post. **Live at https://bengaluru-green-cover.pages.dev**
+(2026-10-05). M6 built; M7's scrollytelling not built (the two front paragraphs stand in for it).
+**M5 closed 2026-09-29.**
 **M4 closed 2026-09-28** (provisionally, by Claude). **M3 dropped 2026-09-28.** **M2 closed 2026-09-27.**
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** host it. Pick Cloudflare Pages or GitHub Pages and upload `site/` directly (the
-two `.pmtiles` are gitignored), then add `og:image` + `og:url` with absolute URLs — the other
-link-preview tags are in. Before that, Aditya to read the two front paragraphs and the new headline
-(2026-10-03), which are Claude's wording. Still open from the review: the left-pane drag-sync check
-(by hand), and M7/M8.
+**Next action:** the LinkedIn kit — a byline (needs Aditya's name and one-line why), the
+preview image + `og:image`/`og:url` (absolute, `https://bengaluru-green-cover.pages.dev/…`),
+a 15-20 s swipe recording, then the post text; check the card in LinkedIn's Post Inspector.
+Redeploy with `./deploy.sh` (Node 22+, `npx wrangler login` once). Aditya to read the BDA and
+Varthur-flood sentences before posting. Still open from the review: the left-pane drag-sync
+check (by hand).
 **First-visitor review (2026-09-29):** `REVIEW-first-visitor-2026-09-29.md` — findings 1-6 and the
 design bugs were acted on 2026-10-03 (see decision log).
 
-**M5's result, `site/data/`:** `2019.pmtiles` and `2026.pmtiles` (13 Feb 2019 and 6 Feb 2026, one
-pass each, z8-14, WebP, 13.8 and 15.0 MB, gitignored — `export_tiles.py`), `hexes.geojson` (loss
+**M5's result, `site/data/`:** `tiles/2019/` and `tiles/2026/` (13 Feb 2019 and 6 Feb 2026, one
+pass each, z8-14, WebP, 792 tiles and 13.8 / 15.0 MB a year, gitignored — `export_tiles.py`;
+PMTiles until 2026-10-05), `hexes.geojson` (loss
 only), `places.geojson` (22 places: 11 east, 5 north-west, 6 elsewhere; copy in `site/places.csv`),
 `outlines.geojson`, `boundary.geojson`, `details.json` (the 38 checked losses for the method page) —
 `export_vectors.py` — and `crops/` (44 card photos at native 10 m — `export_crops.py`).
@@ -95,7 +99,7 @@ to IISc. Do not reintroduce it.
 
 Run `notebooks/m1_spot_check.ipynb` for the whole method end to end, and
 `results/imagery/index.html` for the fastest eyeball check on any single number.
-**Last worked on:** 2026-10-03
+**Last worked on:** 2026-10-05
 
 **`EE_PROJECT=project-id-0186438029819335325`** (display name "TAP", `roles/owner`,
 `earthengine.googleapis.com` enabled). Not a credential, but it does travel with this file if the
@@ -147,7 +151,7 @@ usable and invisible to `list`. Trust `describe`, or just run `check_setup.py`.
 **Analysis:** Python — Earth Engine API (`earthengine-api`), `geopandas`, `shapely`, `h3`, `pandas`
 **Export:** GeoJSON → PMTiles (via `tippecanoe`)
 **Frontend:** MapLibre GL JS, Scrollama.js, Observable Plot. No framework needed.
-**Hosting:** GitHub Pages or Cloudflare Pages
+**Hosting:** Cloudflare Pages, project `bengaluru-green-cover` — `./deploy.sh`
 
 ### Notes for a Java background
 
@@ -1062,6 +1066,19 @@ Append one line per session. Date, what changed, why.
   works are not loss — settled 2026-09-28), so 235 hexes show, not 239; the 6 doubtful ones keep
   their colour but carry `doubtful: true`, and their card says the photos don't settle it. SK
   Layout's card fact changed from "the biggest loss" to "the biggest single place".
+- 2026-10-05 — **Hosted on Cloudflare Pages, and the photo tiles are plain files now.** Claude's
+  calls, provisional. Cloudflare Pages (free, direct upload, no GitHub repo needed) at
+  `bengaluru-green-cover.pages.dev`. New Pages projects now get pushed to Workers (a
+  `<name>.<account>.workers.dev` URL); `wrangler pages project create --force` made a classic
+  Pages project, needed once only. **Pages ignores HTTP Range requests** — a range request returns
+  200 and the whole 15 MB — so pmtiles.js refused to load the photos ("Check that your storage
+  backend supports HTTP Byte Serving"). Fix: `export_tiles.py` now copies its tile cache to
+  `site/data/tiles/<year>/{z}/{x}/{y}.webp` (1,584 files, well under Pages' 20,000 cap), the map
+  uses a plain `tiles` URL with the study bounds, and the pmtiles.js script is gone. Works on any
+  static host; checked live at z11-14, no console errors. The two `.pmtiles` files are still on
+  disk, gitignored and unused. `./deploy.sh` stages `site/` without `serve.py`, `places.csv` or
+  `.pmtiles` into `out/deploy` and uploads it. `method.html` is served at `/method` (Pages drops
+  `.html` with a redirect; links still work).
 
 ## Parked: the property/quality matrix
 
