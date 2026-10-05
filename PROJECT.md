@@ -151,6 +151,7 @@ usable and invisible to `list`. Trust `describe`, or just run `check_setup.py`.
 **Export:** GeoJSON → PMTiles (via `tippecanoe`)
 **Frontend:** MapLibre GL JS, Scrollama.js, Observable Plot. No framework needed.
 **Hosting:** Cloudflare Pages, project `bengaluru-green-cover` — `./deploy.sh`
+**Code:** https://github.com/dtgoyal1/bengaluru-green-cover (public; MIT code, CC BY 4.0 results)
 
 ### Notes for a Java background
 
@@ -1089,6 +1090,14 @@ Append one line per session. Date, what changed, why.
   the swipe is meant to show (first take). Scenes: city → Shivaram Karanth → K Dommasandra → city
   with the URL. Post text follows the page's sourced copy only; "zoom into your own area", not
   "search your area", because search only finds the 22 checked places.
+- 2026-10-05 — **Public on GitHub: https://github.com/dtgoyal1/bengaluru-green-cover.** Aditya's
+  calls: public, MIT for code, CC BY 4.0 for results; OSM-derived outlines stay ODbL and
+  Sentinel-2 keeps its Copernicus attribution (README). Checked before pushing: all 29 commits
+  carry only the personal Gmail, no secrets, no Esri frames ever committed (the notebooks embed
+  Sentinel-2/Earth Engine images only), largest blob a 5 MB notebook. The Earth Engine project id
+  stays in PROJECT.md and one notebook output — not a credential. Repo named after the site, not
+  the local folder. Pushed with `gh` (installed via Homebrew, logged in as `dtgoyal1`). Photo tiles,
+  `.pmtiles`, `data/` and `out/` stay out of git as before; the site itself stays on Cloudflare.
 
 ## Parked: the property/quality matrix
 
