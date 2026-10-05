@@ -21,12 +21,11 @@ Paste this file into a new chat and say which milestone you're on. Update the **
 **M4 closed 2026-09-28** (provisionally, by Claude). **M3 dropped 2026-09-28.** **M2 closed 2026-09-27.**
 **M1 closed 2026-09-11** on a 2-of-3 gate (flat ✓, loss ✓, gain ✗ — see below).
 **Blocked on:** Nothing.
-**Next action:** the LinkedIn kit — a byline (needs Aditya's name and one-line why), the
-preview image + `og:image`/`og:url` (absolute, `https://bengaluru-green-cover.pages.dev/…`),
-a 15-20 s swipe recording, then the post text; check the card in LinkedIn's Post Inspector.
-Redeploy with `./deploy.sh` (Node 22+, `npx wrangler login` once). Aditya to read the BDA and
-Varthur-flood sentences before posting. Still open from the review: the left-pane drag-sync
-check (by hand).
+**Next action:** Aditya posts. The kit is in `out/linkedin/` (gitignored): `swipe.mp4` (18.8 s,
+1080x1080, H.264), `preview.jpg`, `post.md` (post text + first comment). Before posting: read the
+BDA and Varthur-flood sentences on the page, and paste the URL into LinkedIn's Post Inspector
+(linkedin.com/post-inspector) to check the card. Redeploy with `./deploy.sh`. Still open from the
+review: the left-pane drag-sync check (by hand).
 **First-visitor review (2026-09-29):** `REVIEW-first-visitor-2026-09-29.md` — findings 1-6 and the
 design bugs were acted on 2026-10-03 (see decision log).
 
@@ -1079,6 +1078,17 @@ Append one line per session. Date, what changed, why.
   disk, gitignored and unused. `./deploy.sh` stages `site/` without `serve.py`, `places.csv` or
   `.pmtiles` into `out/deploy` and uploads it. `method.html` is served at `/method` (Pages drops
   `.html` with a redirect; links still work).
+- 2026-10-05 — **Byline, link preview and the LinkedIn kit.** Byline "By Aditya Goyal · October
+  2026 · A side project to see where the city's edge went from green to grey." (Aditya approved
+  the line, minus "weekend"; the name is from git config). `og:url` and `og:image`
+  (`site/og.jpg`, 1200x627, the city-scale swipe with hexes) are absolute and live; LinkedInBot
+  gets a 200. The video is recorded headless with Playwright (`recordVideo`, 1080x1080), captions
+  injected per scene, then trimmed and re-encoded to H.264 with `imageio-ffmpeg` (pip, in the
+  venv) since Playwright's own ffmpeg only writes VP8 and macOS has no ffmpeg. **The hexes are
+  hidden in the zoomed-in scenes:** at place scale they cover the photo and hide the very change
+  the swipe is meant to show (first take). Scenes: city → Shivaram Karanth → K Dommasandra → city
+  with the URL. Post text follows the page's sourced copy only; "zoom into your own area", not
+  "search your area", because search only finds the 22 checked places.
 
 ## Parked: the property/quality matrix
 

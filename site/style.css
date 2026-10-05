@@ -56,6 +56,7 @@ button { font: inherit; color: inherit; }
 .hero { display: grid; gap: 10px; padding-block: 16px 22px; }
 .hero h1 { font-size: clamp(32px, 5.4vw, 62px); font-weight: 780; font-variation-settings: "wdth" 72; letter-spacing: -0.015em; line-height: 0.98; max-width: 15ch; }
 .hero .stat { font-size: clamp(17px, 2vw, 21px); max-width: 54ch; }
+.hero .byline { font: 500 12.5px/1.4 var(--mono); color: var(--muted); }
 .hero .how { color: var(--muted); max-width: 62ch; }
 .fronts { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip-btn { border: 1px solid var(--rule); background: var(--panel); border-radius: 999px; padding: 7px 13px; font-size: 13px; cursor: pointer; }
